@@ -1,0 +1,2 @@
+gcc -Wall -o programa.e programa.c -lm
+./programa.e
