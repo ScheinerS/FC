@@ -1,0 +1,117 @@
+Hola Santiago!
+
+La asignación de etiquetas viene dada por "clase". "clase" es un
+vector grande (NxN, aunque alcanzaría con NxN/2). Se inicializa así:
+
+*(clase+0) = 0
+*(clase+1) = 1
+*(clase+2) = 2
+...
+
+así siguiendo.
+
+Las etiquetas de "red" se van escribiendo sobre la misma "red". Es
+decir, donde aparece un fragmento, se reemplaza el valor "1" por la
+etiqueta correspondiente. Te voy a dar un ejemplo con una red de 3x3
+
+0 1 1
+0 0 1
+1 1 1
+
+Comienzo por el primer elemento en el sentido de lectura: *(red+0)
+que vale "0". Como no está ocupado, paso de largo. Sigo leyendo en el
+sentido de lectura, así que *(red+1) vale "1". Es el primer elemento
+ocupado. Mi primer fragmento comienza con frag=2. Voy a *(clase+frag)
+y veo que vale "2" y etiqueto el sitio haciendo *(red+1)=
+*(clase+frag). Incremento luego "frag" pare dejarlo preparado para el
+siguiente fragmento.
+
+Sigo recorriendo y llego al último elemento del 1º renglón. Está
+ocupado. Pero su vecino anterior también, y se etiquetó con "2". Por
+tratarse del primer renglón no hay conflicto con el vecino de arriba,
+así que copio la etiqueta "2". Podría hacer
+
+s=*(red+1);
+*(red+2)=s;
+
+Pero también sería lo mismo (aunque prezca rebuscado) hacer
+
+s=*(red+1);
+s=*(clase+s);
+*(red+2)=s;
+
+Dejémos esto último así, aunque parezca rebuscado.
+
+Seguimos avanzando, y ocurre lo mismo con el último elemento del
+segundo renglón.
+
+Cuando llegamos al tercer renglón, no tiene vecinos ocupados ni
+arriba, ni a la izquierda, así que necesito una nueva etiqueta. Como
+ya había dejado preparado frag (que vale 3) hago s=*(clase+frag) y
+luego *(red+6) = s, y frag++ para dejarlo preparado para la siguiente
+etiqueta.
+
+No te el mismo procedimiento se sigue para *(red+7) que tomará el valo
+s=*(clase+s), como ya veníamos haciendo de manera "algo rebuscada".
+
+El caso conflictivo es el último elemento de la red: *(red+8). Tiene
+un vecino de arriba que vale  "2" y otro a la izquierda que vale "3".
+Tengo que decidir cuál le pongo. Uso como criterio que le pongo el más
+bajo posible, es decir, "2". Pero eso me obliga a re-etiquetar los
+sitos que ya había etiquetado con "3".
+
+¿Cómo hago?
+
+Lo hago dejando indicado en "clase" que a la etiqueta "3" se la debe
+reemplazar por "2", y al final hago una "repasada de la red" y hago
+los cambios.
+
+Para decirle a "clase" que 3 --> 2 voy a *(clase+3) y le cambio el
+signo para indicar que es una etiqueta inválida o "falsa". Y le
+escribo allí cuál es la que corresponde. Entonces
+
+*(clase+3) = -2
+
+Cuando haga la "repasada" final me voy a encontrar que s=-(*(clase+3))
+es la etiqueta que corresponde.
+
+Fijate que si la red es grande, podría ocurrir que un fragmento pase
+varias veces a ser inválido. Por ejemplo, en una red grande podría ser
+que (es un ejemplo)
+
+58 --> 25 --> 17 --> 8
+
+Esto quedará anotado en "clase" del siguiente modo:
+
+*(clase+58) = -25
+*(clase+25) = -17
+*(clase+17) = 8
+
+Y de manera general podés hallar la etiqueta verdadera haciendo
+
+while (*(clase+s)<0)    s =  -(*(clase+s));
+
+Es decir, con este mecanismo vas recorriendo hacia atrás.
+
+Finalmente, lo que parecía "rebuscado" ahora tiene sentido: cada vez
+que asignés una etiqueta de tu vecino (de arriba o abajo) hacés
+
+
+s=*(red+i-1);
+while (*(clase+s)<0)    s =  -(*(clase+s));
+*(red+i)=s;
+
+Por supuesto que si hay un conflicto:
+
+s1=*(red+i-1);
+s2=*(red+i-n);
+while (*(clase+s1)<0)    s1 =  -(*(clase+s1));
+while (*(clase+s2)<0)    s2 =  -(*(clase+s2));
+*(red+i)= minimo(s1,s2);
+
+*(clase+maximo(s1,s2))=- minimo(s1,s2);
+
+
+No sé si esto te aclara! Decime cualquier cosa! Te mando un gran saludo!
+
+Guillermo Frank
