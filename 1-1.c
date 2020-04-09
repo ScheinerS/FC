@@ -43,36 +43,53 @@ int main(){
 	// Generamos la matriz inicial "clase":
 	for(i=0;i<L*L;i++){
 		*(clase+i) = i;
-	}
+		}
 	
-	printf("\nClases:\n");
-	graficar_matriz(clase,L);
+//	printf("\nClases:\n");
+//	graficar_matriz(clase,L);
 	
-//	actualizar(red, L); // No funciona.
 	
-//	etiquetar(red, clase, L);
+	/////////////////////////////////////
+	// Buscamos los clusters en la red //
+	/////////////////////////////////////
 	
-	printf("\nMatriz actualizada:\n");
-	//graficar_matriz(clase,L);
-	
+	int frag;
+	frag=2;
 	
 	// Analizamos el primer elemento *(red+0):
-	
 	if(*(red+0)){
-		*(red+0)=2;
-	}
+		*(red+0)=frag;
+		frag++;		// Para la próxima etiqueta nueva que necesitemos.
+		}
 	
-	// EL BLOQUE QUE SIGUE ESTÁ HACIENDO CUALQUIER COSA. ¿TENDRÍA QUE MIRAR 'FRAG'O ALGO ASÍ? ¿DE DÓNDE SACA EL '2'?
 	
 	// Código para el primer renglón, arrancando desde j=1 porque j=0 fue el primer elemento:
-	int j, s;
-	for(j=1; j<L; j++){
-		// Miramos el elemento de la izquierda:
-		if(*(red+j-1)){
-			s = *(red+j-1);	// guardamos la etiqueta del de la izquierda en la variable 's'.
-			*(red+1) = s;	// asignamos la etiqueta al valor en el que estamos.	
+	int s;
+	for(int j=1; j<L; j++){
+		// Si el lugar está ocupado:
+		if(*(red+j)){
+			printf("Mensaje momentáneo: el lugar con j=%i está ocupado.\n",j);
+			
+			// Miramos si el elemento de la izquierda está ocupado y si lo está, usamos la misma etiqueta:
+			if(*(red+j-1)){
+				printf("Mensaje momentáneo: el lugar con j=%i tiene un uno a la izquierda.\n",j);
+				s = *(red+j-1);	// guardamos la etiqueta del de la izquierda en la variable 's'.
+				
+				s=*(clase+s);
+				*(red+j)=s;		// asignamos la etiqueta de la izquierda a esta casilla.
+				}
+			// Si la de la izquierda no estaba ocupada:
+			else{
+				*(red+j)=frag;
+				printf("Mensaje momentáneo: el lugar con j=%i tiene una etiqueta nueva: %i\n",j,frag);
+				frag++;
+				}
+//				*(red+j-1)=*(clase+frag);
+//				frag++;
+
+			}
 		}
-	}
+	
 	
 	/*
 	for(i=1;i<L;i++){
@@ -83,13 +100,15 @@ int main(){
     for(j=1;j<L;j++){
           (código para analizar el resto *(red+L*i+j))
        }
-  }
+  	}
   */
 
+	printf("\nMatriz etiquetada:\n");
+	graficar_matriz(red,L);
+
+
 	return 0;
-}
-
-
+	}
 
 
 
