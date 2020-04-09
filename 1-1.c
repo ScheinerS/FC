@@ -1,5 +1,3 @@
-// Estime el valor de la probabilidad crı́tica (p_c), registrando los valores de p para los cuales aparece el cluster percolante. Comience con p = 1/2, si el sistema percola repueble la red (usando la misma semilla de números pseudo-aleatorios) con p = p − 1/4. En caso contrario, use p = p + 1/4. Repita este procedimiento sumando o restando 1/8, 1/16, ... , hasta alcanzar la precisión deseada. Promedie luego sobre diferentes realizaciones de la red (semillas).
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -15,7 +13,7 @@ int poblar(int *red, float p, int dim, int sem);
 int max(int s1, int s2);
 int min(int s1, int s2);
 int graficar_matriz(int *red,int N);
-int etiquetar(int *red, int *clase, int N);
+//int etiquetar(int *red, int *clase, int N);
 
 // MAIN:
 
@@ -37,7 +35,7 @@ int main(){
 	printf("\nMatriz poblada:\n");
 	graficar_matriz(red,L);
 	
-	// Generamos la matriz inicial "clase":
+	// Generamos el vector inicial "clase":
 	for(i=0;i<L*L;i++){
 		*(clase+i) = i;
 		}
@@ -98,18 +96,18 @@ int main(){
 	for(int i=1; i<L; i++){
 		for(int j=1; j<L; j++){
 			if(*(red+i*L+j)){
-				// Miramos si el elemento de la izquierda está ocupado:
-				if(*(red+i*L+j-1)){
-					s = *(red+i*L+j-1);	// guardamos la etiqueta del de la izquierda en la variable 's'.
+				// Miramos si el elemento de arriba está ocupado:
+				if(*(red+(i-1)*L+j)){
+					s = *(red+(i-1)*L+j);	// guardamos la etiqueta del de arriba en la variable 's'.
 					s = *(clase+s);
-					*(red+i*L+j)=s;		// asignamos la etiqueta de la izquierda a esta casilla.
+					*(red+i*L+j)=s;		// asignamos la etiqueta de arriba a esta casilla.
 					}
 				else{
-					// Miramos si el elemento de arriba está ocupado:
-					if(*(red+(i-1)*L+j)){
-						s = *(red+(i-1)*L+j);	// guardamos la etiqueta del de arriba en la variable 's'.
+					// Miramos si el elemento de la izquierda está ocupado:
+					if(*(red+i*L+j-1)){
+						s = *(red+i*L+j-1);	// guardamos la etiqueta del de la izquierda en la variable 's'.
 						s = *(clase+s);
-						*(red+i*L+j)=s;		// asignamos la etiqueta de arriba a esta casilla.
+						*(red+i*L+j)=s;		// asignamos la etiqueta de la izquierda a esta casilla.
 						}
 					else{
 						*(red+i*L+j)=frag;
@@ -122,18 +120,25 @@ int main(){
 			}
 		}
 	
-	/*
-	for(i=1;i<L;i++){
-
-    for(j=1;j<L;j++){
-          (código para analizar el resto *(red+L*i+j))
-       }
-  	}
-  */
-
 	printf("\nMatriz etiquetada:\n");
 	graficar_matriz(red,L);
 
+	// Función "actualizar":
+	
+	/*Repasa toda la tira corrigiendo los valores incorrectos*/
+
+    for(int i=0;i<L*L;i++){
+        s=*(red+i);
+        
+        while (*(clase+s)<0){
+			s=-(*(clase+s));
+			*(red+i)=*(clase+s);
+			}
+		}
+	
+	printf("\nMatriz repasada:\n");		// El "repaso" no está funcionando, todavía.
+	graficar_matriz(red,L);
+	
 	return 0;
 	}
 
@@ -167,7 +172,7 @@ int poblar(int *red, float prob, int N, int seed){
 	//printf("Poblando la red:\n");
 	for (i=0;i<N*N;i++){
 		*(red+i) = 0; // Se inician todas las casillas en cero (vacías).
-		random=((float)rand())/((float) RAND_MAX);    //Valor aleatorio entre 0 y 1.
+		random=((float)rand())/((float) RAND_MAX);    // Valor aleatorio entre 0 y 1.
 		//printf("\nrandom = %f",random);
 		
 		if (random<prob){
@@ -190,28 +195,6 @@ int graficar_matriz(int *red, int N){
 	}
 	return 0;
 }
-
-// Función que había hecho antes:
-/*
-int etiquetar(int *red, int *clase, int N){
-	int i;
-	int frag = 2;	// guardamos el valor.
-	
-	// Guardamos los valores en la matriz "clase":
-	for(i=0;i<N;i++){	// recorremos la red.
-		if(*(red+i)){	// si hay un uno en ese lugar de la red.
-			if(*(red+i-N)){ // si hay un uno arriba.
-				*(clase+i) = frag;
-			}
-			
-			//frag++;
-		}
-	}
-	//printf("s=%i",s);
-	
-	return 0;
-}
-*/
 
 /*
 int actualizar(int *red, int N){
