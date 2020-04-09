@@ -115,3 +115,39 @@ while (*(clase+s2)<0)    s2 =  -(*(clase+s2));
 No sé si esto te aclara! Decime cualquier cosa! Te mando un gran saludo!
 
 Guillermo Frank
+
+-----------------------------------------------------------------------------
+
+Hola Santiago!
+
+"clase" es un vector. Sí es correcto para el momento inicial:
+
+ clase= 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+
+Para los bordes, no hay que complicarse. Simplemente lo analizás antes
+de comenzar cada loop y listo. Por ejemplo:
+
+(código para primer elemento *(red+0)
+
+for (j=1; j<n;j++)
+  {
+    (código para el primer renglón,
+     arrancando desde i=1 porque i=0 fue el primer lemento)
+  }
+
+for(i=1;i<n;i++)
+  {
+    (código para analizar primer elemento de 2º renglón en adelante
+*(red+n*i+0))
+
+    for(j=1;j<n;j++)
+       {
+          (código para analizar el resto *(red+n*i+j))
+       }
+  }
+
+
+¿me explico?
+
+Un gran saludo!
+
