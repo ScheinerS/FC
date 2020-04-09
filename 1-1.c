@@ -5,7 +5,7 @@
 #include <math.h>
 #include <time.h>
 
-# define L 4
+# define L 8
 # define SEED 26 //0868
 # define PROB 0.5
 
@@ -31,9 +31,6 @@ int main(){
 	clase = malloc(L*L*sizeof(int));    //Reserva el espacio necesario para la red.
 	
 	
-	printf("\nMatriz inicial:\n");
-	graficar_matriz(red,L);
-	
 	// Poblamos la matriz:
 	poblar(red, prob, L, seed);
 	
@@ -44,9 +41,6 @@ int main(){
 	for(i=0;i<L*L;i++){
 		*(clase+i) = i;
 		}
-	
-//	printf("\nClases:\n");
-//	graficar_matriz(clase,L);
 	
 	
 	/////////////////////////////////////
@@ -67,35 +61,69 @@ int main(){
 	int s;
 	for(int j=1; j<L; j++){
 		// Si el lugar está ocupado:
-		if(*(red+j)){
-			printf("Mensaje momentáneo: el lugar con j=%i está ocupado.\n",j);
-			
+		if(*(red+j)){			
 			// Miramos si el elemento de la izquierda está ocupado y si lo está, usamos la misma etiqueta:
 			if(*(red+j-1)){
-				printf("Mensaje momentáneo: el lugar con j=%i tiene un uno a la izquierda.\n",j);
 				s = *(red+j-1);	// guardamos la etiqueta del de la izquierda en la variable 's'.
-				
-				s=*(clase+s);
+				s = *(clase+s);
 				*(red+j)=s;		// asignamos la etiqueta de la izquierda a esta casilla.
 				}
 			// Si la de la izquierda no estaba ocupada:
 			else{
 				*(red+j)=frag;
-				printf("Mensaje momentáneo: el lugar con j=%i tiene una etiqueta nueva: %i\n",j,frag);
 				frag++;
 				}
-//				*(red+j-1)=*(clase+frag);
-//				frag++;
-
 			}
 		}
 	
+	// Código para la primera columna, arrancando desde i=1 porque i=0 fue el primer elemento:
+	for(int i=1; i<L; i++){
+		// Si el lugar está ocupado:
+		if(*(red+i*L+0)){			
+			// Miramos si el elemento de arriba está ocupado y si lo está, usamos la misma etiqueta:
+			if(*(red+(i-1)*L+0)){
+				s = *(red+(i-1)*L+0);	// guardamos la etiqueta del de arriba en la variable 's'.
+				s = *(clase+s);
+				*(red+i*L+0)=s;		// asignamos la etiqueta de arriba a esta casilla.
+				}
+			// Si la de arriba no estaba ocupada:
+			else{
+				*(red+i*L+0)=frag;
+				frag++;
+				}
+			}
+		}
+	
+	// Código el bloque que queda de la matriz, arrancando desde i=1 y j = 1:
+	for(int i=1; i<L; i++){
+		for(int j=1; j<L; j++){
+			if(*(red+i*L+j)){
+				// Miramos si el elemento de la izquierda está ocupado:
+				if(*(red+i*L+j-1)){
+					s = *(red+i*L+j-1);	// guardamos la etiqueta del de la izquierda en la variable 's'.
+					s = *(clase+s);
+					*(red+i*L+j)=s;		// asignamos la etiqueta de la izquierda a esta casilla.
+					}
+				else{
+					// Miramos si el elemento de arriba está ocupado:
+					if(*(red+(i-1)*L+j)){
+						s = *(red+(i-1)*L+j);	// guardamos la etiqueta del de arriba en la variable 's'.
+						s = *(clase+s);
+						*(red+i*L+j)=s;		// asignamos la etiqueta de arriba a esta casilla.
+						}
+					else{
+						*(red+i*L+j)=frag;
+						frag++;
+						}
+					}
+
+		
+				}
+			}
+		}
 	
 	/*
 	for(i=1;i<L;i++){
-		
-		(código para analizar primer elemento de 2º renglón en adelante
-		*(red+L*i+0))
 
     for(j=1;j<L;j++){
           (código para analizar el resto *(red+L*i+j))
@@ -105,7 +133,6 @@ int main(){
 
 	printf("\nMatriz etiquetada:\n");
 	graficar_matriz(red,L);
-
 
 	return 0;
 	}
