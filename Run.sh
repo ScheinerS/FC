@@ -7,6 +7,6 @@ gcc -Wall -o $1.e $1.c -lm
 }
 
 run 1-1
-#run clusters
+run clustersfinal
 #run 1a_M
 #run hk
