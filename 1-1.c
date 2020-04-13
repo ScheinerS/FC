@@ -3,10 +3,11 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
+#include <string.h>
 
 #define SEED 26//085
 #define PROB 0.5
-#define L 10
+#define L 32
 
 double myrandom(double prob);
 int min(int s1,int s2);
@@ -130,6 +131,23 @@ int main()
 	  printf("\n");
 
 	return 0;
+}
+
+void guardar_datos(X,Y){
+	// Creamos el archivo:
+	char filename[255];
+	sprintf(filename,"Tamaños_L=32.txt");
+	FILE *fp=fopen(filename,"w");
+
+	// Entonces supongamos que ustedes ahora tienen dos punteros Y y X de N componentes cada uno y quieren graficar Y vs X. Entonces hacen lo siguiente
+
+	for(i = 0; i < N; i++)
+	  {
+	  fprintf(fp,"%lf %lf",*(X+i),*(Y+i));
+	  }
+	
+	// cierran el archivo.
+	fclose(fp); 
 }
 
 int etiqueta_verdadera(int *clase, int s)
