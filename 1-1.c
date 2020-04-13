@@ -1,233 +1,163 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
+ /* Programa para generar una red de LxL de unos y ceros y detectar los clusters.*/
 
-# define L 8
-# define SEED 26 //0868
-# define PROB 0.5
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+
+#define SEED 26//085
+#define PROB 0.5
+#define L 10
 
 double myrandom(double prob);
-//int seed();
-int poblar(int *red, float p, int dim, int sem);
-int max(int s1, int s2);
-int min(int s1, int s2);
-int graficar_matriz(int *red,int N);
-//int etiquetar(int *red, int *clase, int N);
+int min(int s1,int s2);
+int max(int s1,int s2);
+int etiqueta_verdadera(int *clase, int s);
+int imprimir(int *red,int N);
 
-// MAIN:
-
-int main(){
-	int i, seed;
-	float prob;
-	int *red, *clase;
-	
-	prob=PROB;
-	seed=SEED;
-	
-	red = malloc(L*L*sizeof(int));    //Reserva el espacio necesario para la red.
-	clase = malloc(L*L*sizeof(int));    //Reserva el espacio necesario para la red.
-	
-	
-	// Poblamos la matriz:
-	poblar(red, prob, L, seed);
-	
-	printf("\nMatriz poblada:\n");
-	graficar_matriz(red,L);
-	
-	// Generamos el vector inicial "clase":
-	for(i=0;i<L*L;i++){
-		*(clase+i) = i;
-		}
-	
-	
-	/////////////////////////////////////
-	// Buscamos los clusters en la red //
-	/////////////////////////////////////
-	
-	int frag;
+int main()
+{
+	int    i,s,s1,s2,frag,j,N;
+	double prob,r;
+	int *red,*clase;
+	s =1;
+	s1=0;	// Va a ser el vecino de arriba.
+	s2=0;	// Va a ser el vecino de la izquierda.
 	frag=2;
+	N=L;
 	
-	// Analizamos el primer elemento *(red+0):
-	if(*(red+0)){
-		*(red+0)=frag;
-		frag++;		// Para la próxima etiqueta nueva que necesitemos.
+	red  = (int*)malloc((N*N)*sizeof(int));
+	clase= (int*)malloc((N*N)*sizeof(int));
+
+	prob=PROB;
+
+	srand(SEED);
+	
+	//Generamos la matriz de unos y ceros:
+	for(i=0;i<N*N;i++)
+		{
+			r=myrandom(prob);
+			if(r<prob) 
+				*(red+i)=0;
+			else       
+				*(red+i)=1;
 		}
-	
-	
-	// Código para el primer renglón, arrancando desde j=1 porque j=0 fue el primer elemento:
-	int s;
-	for(int j=1; j<L; j++){
-		// Si el lugar está ocupado:
-		if(*(red+j)){			
-			// Miramos si el elemento de la izquierda está ocupado y si lo está, usamos la misma etiqueta:
-			if(*(red+j-1)){
-				s = *(red+j-1);	// guardamos la etiqueta del de la izquierda en la variable 's'.
-				s = *(clase+s);
-				*(red+j)=s;		// asignamos la etiqueta de la izquierda a esta casilla.
-				}
-			// Si la de la izquierda no estaba ocupada:
-			else{
-				*(red+j)=frag;
-				frag++;
-				}
-			}
-		}
-	
-	// Código para la primera columna, arrancando desde i=1 porque i=0 fue el primer elemento:
-	for(int i=1; i<L; i++){
-		// Si el lugar está ocupado:
-		if(*(red+i*L+0)){			
-			// Miramos si el elemento de arriba está ocupado y si lo está, usamos la misma etiqueta:
-			if(*(red+(i-1)*L+0)){
-				s = *(red+(i-1)*L+0);	// guardamos la etiqueta del de arriba en la variable 's'.
-				s = *(clase+s);
-				*(red+i*L+0)=s;		// asignamos la etiqueta de arriba a esta casilla.
-				}
-			// Si la de arriba no estaba ocupada:
-			else{
-				*(red+i*L+0)=frag;
-				frag++;
-				}
-			}
-		}
-	
-	// Código el bloque que queda de la matriz, arrancando desde i=1 y j = 1:
-	for(int i=1; i<L; i++){
-		for(int j=1; j<L; j++){
-			if(*(red+i*L+j)){
-				// Miramos si el elemento de arriba está ocupado:
-				if(*(red+(i-1)*L+j)){
-					s = *(red+(i-1)*L+j);	// guardamos la etiqueta del de arriba en la variable 's'.
-					s = *(clase+s);
-					*(red+i*L+j)=s;		// asignamos la etiqueta de arriba a esta casilla.
-					}
-				else{
-					// Miramos si el elemento de la izquierda está ocupado:
-					if(*(red+i*L+j-1)){
-						s = *(red+i*L+j-1);	// guardamos la etiqueta del de la izquierda en la variable 's'.
-						s = *(clase+s);
-						*(red+i*L+j)=s;		// asignamos la etiqueta de la izquierda a esta casilla.
-						}
-					else{
-						*(red+i*L+j)=frag;
-						frag++;
-						}
-					}
+	  imprimir(red,N);
 
-		
-				}
-			}
-		}
-	
-	printf("\nMatriz etiquetada:\n");
-	graficar_matriz(red,L);
+	  printf("\n");
 
-	// Función "actualizar":
-	
-	/*Repasa toda la tira corrigiendo los valores incorrectos*/
-
-    for(int i=0;i<L*L;i++){
-        s=*(red+i);
-        
-        while (*(clase+s)<0){
-			s=-(*(clase+s));
-			*(red+i)=*(clase+s);
-			}
-		}
-	
-	printf("\nMatriz repasada:\n");		// El "repaso" no está funcionando, todavía.
-	graficar_matriz(red,L);
-	
-	return 0;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Funciones:
-
-double myrandom(double prob)
-{
-	double r;
-	r=(double)rand()/(double)RAND_MAX;
-	return r;
-}
-
-int poblar(int *red, float prob, int N, int seed){
-	float random;
-	int i;
-	srand(seed);
-	//printf("Poblando la red:\n");
-	for (i=0;i<N*N;i++){
-		*(red+i) = 0; // Se inician todas las casillas en cero (vacías).
-		random=((float)rand())/((float) RAND_MAX);    // Valor aleatorio entre 0 y 1.
-		//printf("\nrandom = %f",random);
-		
-		if (random<prob){
-			*(red+i) = 1; // Llena la casilla.
-		}
+	for(s=0;s<N*N;s++)
+	{
+	*(clase+s)=s;
 	}
 	
-	return 0;
-}
-
-
-int graficar_matriz(int *red, int N){
-	printf("\n");
-	int i, j;
-	for(i=0;i<N;i++){
-		for(j=0;j<N;j++){
-			printf("%i\t", *(red + i*N + j));
-		}
-		printf("\n");
-	}
-	return 0;
-}
-
-/*
-int actualizar(int *red, int N){
-	
-	int i;
-	
-	if (s){
-		while (*(clase+s)<0) s=-(*(clase+s));
-		*(red+i)=s;
-		*(clase+s)=s;
-	}
-	else{
-		*(red+i)=frag;
-		*(clase+frag)=frag; // por seguridad!
+	// Analizamos el primer lugar de la matriz:
+	if(*(red)){
+		*(red) =frag;
 		frag++;
+		}
+	
+	// Analizamos la primera fila, sin el primer lugar:
+	for(i=1;i<N;i++){
+		s1= *(red+i-1);
+		
+		if(*(red+i) && s1)  /*s1 es 1.*/
+			{ *(red+i) = etiqueta_verdadera(clase, s1);
+			}
+		if(*(red+i) && !s1)  /*s1 es 0.*/
+			{ *(red+i)=frag;
+			  frag++;
+			}
 	}
-*/
 
-int max(int s1, int s2){
-   int M;
-   if (s1 > s2)
-      M = s1;
-   else
-      M = s2;
-   return M; 
+	// Analizamos la primera columna, sin el primer lugar:
+	for(i=1;i<N;i++)
+	{ s2 = *(red+(i*N-N));
+		if(*(red+(i*N)) && s2)  /*s2 es 1.*/
+			{ *(red+(i*N)) = etiqueta_verdadera(clase, s2);
+			}
+		if(*(red+(i*N)) && !s2)  /*s2 es 0.*/
+			{ *(red+(i*N))=frag;
+		  	frag++;
+		}
+	}
+	
+	// Analizamos el resto de la matriz:
+	for(i=1;i<N;i++)
+	{ for(j=1;j<N;j++)
+		{ s1 = *(red+(i*N+j-1)); //El casillero de la izquierda.
+		  s2 = *(red+(i*N+j-N)); //El casillero de arriba.
+
+		  if( *(red+(i*N+j)) && (s1 || s2))
+			  { if (s1 && s2 && (etiqueta_verdadera(clase, s2)<etiqueta_verdadera(clase, s1))) // Los dos son 1 y s1 mayor.
+					{ *(red+(i*N+j)) = etiqueta_verdadera(clase, s2);
+					  *(clase+s1) = -abs(*(clase+s2));
+					}
+				if (s1 && s2 && (etiqueta_verdadera(clase, s1)<etiqueta_verdadera(clase, s2))) // Los dos son 1 y s2 mayor.
+					{ *(red+(i*N+j)) = etiqueta_verdadera(clase, s1);
+					  *(clase+s2) = -abs(*(clase+s1));
+					}
+				if (s1 && s2 && (etiqueta_verdadera(clase, s2)==etiqueta_verdadera(clase, s1))) // Los dos son 1 y son iguales. Elegimos arbitrariamente s2.
+					{ *(red+(i*N+j))=etiqueta_verdadera(clase, s2);
+					}
+				if ((!s1) && s2) // s1 es cero y s2 es uno.
+					{ *(red+(i*N+j))=etiqueta_verdadera(clase, s2);
+					}
+				if (s1 && (!s2)) // s1 es uno y s2 es cero.
+					{ *(red+(i*N+j))=etiqueta_verdadera(clase, s1);
+					}
+			   }
+
+		  if ( *(red+(i*N+j)) && ((!s1) && (!s2))) // los dos son cero.
+		  { *(red+(i*N+j))=frag;
+			frag++;
+		  }
+		}
+	}
+
+	for(i=0; i<N*N; i++)
+		{ *(clase+i)=etiqueta_verdadera(clase, i);
+		}
+
+
+	for(i=0;i<N*N;i++)
+		{ *(red+i) = *(clase+*(red+i));
+		}
+
+	free(clase);
+
+	  imprimir(red,N);
+
+	  printf("\n");
+
+	return 0;
 }
 
-int min(int s1, int s2) 
-{
-   int m;
-   if (s1 > s2)
-      m = s2;
-   else
-      m = s1;
-   return m; 
+int etiqueta_verdadera(int *clase, int s)
+	{ while(*(clase+s)<0){
+		s = - *(clase+s);
+		}
+		
+	return *(clase+s);
 }
+
+int imprimir(int *red,int N){
+	int i,j;
+
+	for (i=0;i<N;i++){
+		for (j=0;j<N;j++){
+			printf("%2i\t", *(red+N*i+j));
+			}
+		printf("\n");
+		}
+
+	return 0;
+}
+
+
+double myrandom(double prob){
+	double r;
+
+	r=(double)rand()/(double)RAND_MAX;
+
+	return r;
+	}
