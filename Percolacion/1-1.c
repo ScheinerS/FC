@@ -1,4 +1,5 @@
- /* Programa para generar una red de LxL de unos y ceros y detectar los clusters.*/
+// Santiago Scheiner
+/* Programa para generar una red de LxL de unos y ceros y detectar los clusters.*/
 
 #include<stdio.h>
 #include<stdlib.h>
