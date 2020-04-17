@@ -8,7 +8,7 @@
 
 #define SEED 26//085
 #define PROB 0.55
-#define L 6
+#define L 32
 
 double myrandom(double prob);
 int min(int s1,int s2);
@@ -208,7 +208,7 @@ int imprimir(int *red,int N){
 
 	for (i=0;i<N;i++){
 		for (j=0;j<N;j++){
-			printf("%2i\t", *(red+N*i+j));
+			printf("%4i", *(red+N*i+j));
 			}
 		printf("\n");
 		}
