@@ -16,9 +16,16 @@ int max(int s1,int s2);
 int etiqueta_verdadera(int *clase, int s);
 int imprimir(int *red,int N);
 int guardar_datos(int *X, int *Y);
+int llenar_matriz();
 
-int main()
-{
+int main(){
+	
+	llenar_matriz();
+	
+	return 0;
+}
+
+int llenar_matriz(){
 	int    i,s,s1,s2,frag,j,N;
 	double prob,r;
 	int *red, *clase, *tamano, *etiquetas;
