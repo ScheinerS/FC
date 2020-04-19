@@ -1,14 +1,17 @@
 // Santiago Scheiner
 /* Programa para generar una red de LxL de unos y ceros y detectar los clusters.*/
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include <string.h>
+
 
 #define SEED 26//085
 #define PROB 0.55
 #define L 32
+#define MUESTRAS 1000 // 27000
+#define IMPRIMIR_REDES 0	// Para no mostrar las redes en pantalla.
 
 double myrandom(double prob);
 int min(int s1,int s2);
@@ -19,8 +22,12 @@ int guardar_datos(int *X, int *Y);
 int llenar_matriz();
 
 int main(){
-	
-	llenar_matriz();
+		
+	for(int m=0;m<MUESTRAS;m++){
+		llenar_matriz();
+		printf("Muestra:\t%d / %d\r",m,MUESTRAS);
+		fflush(stdout);
+		}
 	
 	return 0;
 }
@@ -51,10 +58,11 @@ int llenar_matriz(){
 			else       
 				*(red+i)=1;
 		}
-	printf("Red:\n");
-	imprimir(red,N);
-
-	printf("\n");
+	if(IMPRIMIR_REDES){
+		printf("Red:\n");
+		imprimir(red,N);
+		printf("\n");
+	}
 
 	for(s=0;s<N*N;s++)
 	{
@@ -137,12 +145,11 @@ int llenar_matriz(){
 
 	free(clase);
 	
-	printf("Red clasificada:\n");
-	
-	imprimir(red,N);
-
-	printf("\n");
-
+	if(IMPRIMIR_REDES){
+		printf("Red clasificada:\n");
+		imprimir(red,N);
+		printf("\n");
+	}
 
 	// Contamos la cantidad de clusters que existen con "i" componentes:
 	etiquetas = (int*)malloc((N*N)*sizeof(int));	// vector con las etiquetas posibles: {2, 3, ..., N*N/2}.
@@ -151,7 +158,7 @@ int llenar_matriz(){
 	int e;
 	etiquetas[0] = etiquetas[1] = 0;	// no hay clustes con etiquetas 0 y 1.
 	
-	printf("Etiqueta\tTamaño del cluster\n");
+//	printf("Etiqueta\tTamaño del cluster\n");
 
 	// Barremos la matriz una vez por cada etiqueta y contamos cuántas veces encontramos cada etiqueta.
 	// DEBE HABER UNA FORMA MÁS EFICIENTE, PERO NO SE ME OCURRE.
@@ -168,7 +175,7 @@ int llenar_matriz(){
 			}
 		tamano[e]=count;
 		count = 0;	// Reiniciamos la cuenta para la siguiente etiqueta.
-		printf("%i\t\t%i\n",etiquetas[e],tamano[e]);
+		//printf("%i\t\t%i\n",etiquetas[e],tamano[e]);
 		}
 	
 	// Guardamos los datos en el archivo:
@@ -187,7 +194,7 @@ int guardar_datos(int *X, int *Y){
 	// sprintf(filename,"Tamaños_L=32.txt");
 	
 	// Creamos el archivo:
-	FILE *fp=fopen(filename,"w");
+	FILE *fp=fopen(filename,"a");
 	
 	int i;
 	for(i = 0; i < L*L/2+1; i++)
