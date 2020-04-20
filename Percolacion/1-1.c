@@ -10,8 +10,9 @@
 #define SEED 26//085
 #define PROB 0.55
 #define L 32
-#define MUESTRAS 1000 // 27000
+#define MUESTRAS 50000 // 27000
 #define IMPRIMIR_REDES 0	// Para no mostrar las redes en pantalla.
+#define GUARDAR_DATOS 1		// Para que se guarden los datos en un TXT.
 
 double myrandom(double prob);
 int min(int s1,int s2);
@@ -178,9 +179,10 @@ int llenar_matriz(){
 		//printf("%i\t\t%i\n",etiquetas[e],tamano[e]);
 		}
 	
-	// Guardamos los datos en el archivo:
-	guardar_datos(etiquetas,tamano);
-	
+	if(GUARDAR_DATOS){
+		// Guardamos los datos en el archivo:
+		guardar_datos(etiquetas,tamano);
+		}
 	return 0;
 }
 
@@ -198,9 +200,12 @@ int guardar_datos(int *X, int *Y){
 	
 	int i;
 	for(i = 0; i < L*L/2+1; i++)
-	  {
-	  fprintf(fp,"%4d\t%4d\n",*(X+i),*(Y+i));
-	  }
+		{
+		// Lo guardamos si es no nulo:
+		if(*(Y+i)){
+			fprintf(fp,"%4d\t%4d\n",*(X+i),*(Y+i));
+			}
+		}
 	
 	// Cerramos el archivo:
 	fclose(fp);
