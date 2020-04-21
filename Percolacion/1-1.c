@@ -5,35 +5,45 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <time.h>
 
 
-#define SEED 26//085
-#define PROB 0.55
-#define L 32
-#define MUESTRAS 50000 // 27000
-#define IMPRIMIR_REDES 0	// Para no mostrar las redes en pantalla.
-#define GUARDAR_DATOS 1		// Para que se guarden los datos en un TXT.
+#define PROB	0.61
+#define L		32
+#define MUESTRAS	27000	// 27000
+#define IMPRIMIR_REDES	0	// Para no mostrar las redes en pantalla.
+#define GUARDAR_DATOS	0	// Para que se guarden los datos en un TXT.
+#define GUARDAR_HISTOGRAMA	1	// Para que se guarde el histograma en un TXT.
+
 
 double myrandom(double prob);
-int min(int s1,int s2);
-int max(int s1,int s2);
+//int min(int s1,int s2);
+//int max(int s1,int s2);
 int etiqueta_verdadera(int *clase, int s);
 int imprimir(int *red,int N);
-int guardar_datos(int *X, int *Y);
-int llenar_matriz();
+int guardar_datos(double *X);
+int llenar_matriz(double *hist);
+int actualizar_histograma(double *hist, int *tamano);
 
 int main(){
-		
+	
+	double *hist;
+	hist= (double*)malloc((L*L/2)*sizeof(double));
+	
 	for(int m=0;m<MUESTRAS;m++){
-		llenar_matriz();
-		printf("Muestra:\t%d / %d\r",m,MUESTRAS);
+		llenar_matriz(hist);
+		
+		printf("Muestra:\t%d / %d\r", m, MUESTRAS);
 		fflush(stdout);
 		}
 	
 	return 0;
 }
 
-int llenar_matriz(){
+
+
+
+int llenar_matriz(double *hist){
 	int    i,s,s1,s2,frag,j,N;
 	double prob,r;
 	int *red, *clase, *tamano, *etiquetas;
@@ -47,8 +57,7 @@ int llenar_matriz(){
 	clase= (int*)malloc((N*N)*sizeof(int));
 
 	prob=PROB;
-
-	srand(SEED);
+	srand(time(NULL));
 	
 	//Generamos la matriz de unos y ceros:
 	for(i=0;i<N*N;i++)
@@ -161,9 +170,7 @@ int llenar_matriz(){
 	
 //	printf("Etiqueta\tTamaño del cluster\n");
 
-	// Barremos la matriz una vez por cada etiqueta y contamos cuántas veces encontramos cada etiqueta.
-	// DEBE HABER UNA FORMA MÁS EFICIENTE, PERO NO SE ME OCURRE.
-
+	// Barremos la matriz una vez por cada etiqueta y contamos cuántas veces encontramos cada etiqueta:
 	for (e=2;e<N*N/2+1;e++){
 		etiquetas[e] = e;
 		for(i=0;i<N;i++){
@@ -179,32 +186,51 @@ int llenar_matriz(){
 		//printf("%i\t\t%i\n",etiquetas[e],tamano[e]);
 		}
 	
-	if(GUARDAR_DATOS){
+	actualizar_histograma(hist, tamano);
+	
+	
+	if(GUARDAR_HISTOGRAMA){
 		// Guardamos los datos en el archivo:
-		guardar_datos(etiquetas,tamano);
+		guardar_datos(hist);
 		}
+	
+	return 0;
+}
+
+int actualizar_histograma(double *hist, int *tamano){
+	
+	int k;
+	
+	// Barremos todos los valores que hay en "tamano":
+	for (int i=0;i<L*L/+1;i++)
+        {
+		// Guardamos en "k" el tamaño que tiene el bloque que estamos mirando:
+        k = *(tamano+i);
+        // Y, si k no es nulo, vamos al lugar "k" del histograma, para incrementarlo en uno:
+        if(k){
+        	*(hist+k) = (*(hist+k)) + 1.0;
+        	//printf("tamano=%d\t\thist[%d]=%lf\n",*(tamano+i),*(tamano+i),*(hist+k));
+        	}
+        }
+
+	
 	return 0;
 }
 
 
-
-
-int guardar_datos(int *X, int *Y){
+int guardar_datos(double *X){
 
 	char filename[255];
-	sprintf(filename,"Tamaños_L=32.txt");
+	sprintf(filename,"Tamaños_L=%d_M=%d_prob=%.2f.txt",L,MUESTRAS,PROB);
 	// sprintf(filename,"Tamaños_L=32.txt");
 	
 	// Creamos el archivo:
-	FILE *fp=fopen(filename,"a");
+	FILE *fp=fopen(filename,"w");
 	
 	int i;
 	for(i = 0; i < L*L/2+1; i++)
 		{
-		// Lo guardamos si es no nulo:
-		if(*(Y+i)){
-			fprintf(fp,"%4d\t%4d\n",*(X+i),*(Y+i));
-			}
+		fprintf(fp,"%4f\n",*(X+i));
 		}
 	
 	// Cerramos el archivo:

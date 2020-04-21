@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt
 path = os.path.dirname(os.path.realpath('__file__'))
 sys.path.append(path)
 
-TitleSize = 15
-AxisLabelSize = 12
+TitleSize = 20
+AxisLabelSize = 15
 LegendSize = 12
 NumberSize = 12
 
@@ -25,23 +25,26 @@ plt.rc('font', family='serif')
 
 #%%
 
+prob=[0.55, 0.59, 0.61]
 L=32
-M=50000
-
-data = np.loadtxt("Tamaños_L=%d.txt"%(L))
-X = data[:,0]
-Y = data[:,1]
-
-y_1000 = Y[0:1000]
+M=27000 # Automatizar esto.
 
 plt.figure()
-#plt.scatter(X,Y)
-plt.hist(y_1000,bins=int(np.sqrt(len(y_1000))))
 
-#plt.legend(loc='best', fontsize=LegendSize)
-plt.title(r'Tama$\tilde{n}$os de los clusters [L=32, 50000 muestras]', fontsize=TitleSize)
-plt.xlabel(r'', fontsize=AxisLabelSize)
-plt.ylabel(r'', fontsize=AxisLabelSize)
+for p in prob:
+    Y = np.loadtxt("Tamaños_L=%d_M=%d_prob=%.2f.txt"%(L,M,p))
+    # Normalizamos el histograma:
+    Y = Y/max(Y)
+
+    X = range(len(Y))
+
+
+    plt.loglog(X,Y,'.',label='prob = %.2f'%p)
+
+plt.legend(loc='best', fontsize=LegendSize)
+plt.title(r'L=%d, %d muestras'%(L,M), fontsize=TitleSize)
+plt.xlabel(r'$Tama\tilde{n}o$', fontsize=AxisLabelSize)
+plt.ylabel(r'Probabilidad de formaci\'on', fontsize=AxisLabelSize)
 
 # Anotaciones en el gráfico:
 #plt.arrow(20, 0, 10, 10)

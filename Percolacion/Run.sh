@@ -7,5 +7,6 @@ gcc -Wall -o $1.e $1.c -lm
 }
 
 run 1-1
+#run Armar_histograma
 #run clustersfinal
 #run 1a_M
