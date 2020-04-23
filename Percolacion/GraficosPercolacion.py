@@ -25,16 +25,16 @@ plt.rc('font', family='serif')
 
 #%%
 
-prob=[0.55, 0.59, 0.61]
-L=32
-M=27000 # Automatizar esto.
+prob = [0.55, 0.59, 0.61]
+L = 4
+M = 27000 # Automatizar esto.
 
 plt.figure()
 
 for p in prob:
-    Y = np.loadtxt("Tamaños_L=%d_M=%d_prob=%.2f.txt"%(L,M,p))
+    Y = np.loadtxt(path + "/Datos/histograma_L=%d_M=%d_prob=%.2f.txt"%(L,M,p))
     # Normalizamos el histograma:
-    Y = Y/max(Y)
+    #Y = Y/max(Y)
 
     X = range(len(Y))
 
@@ -53,4 +53,4 @@ plt.ylabel(r'Probabilidad de formaci\'on', fontsize=AxisLabelSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
 
-plt.savefig(path + '/Histograma(L=%d,M=%d).png'%(L,M))
+plt.savefig(path + '/Histogramas/Histograma(L=%d,M=%d).png'%(L,M))
