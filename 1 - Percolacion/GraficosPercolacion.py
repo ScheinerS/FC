@@ -26,17 +26,19 @@ plt.rc('font', family='serif')
 #%%
 
 prob = [0.55, 0.59, 0.61]
-L = 4
-M = 27000 # Automatizar esto.
+L = 32
+M = 27000
 
 plt.figure()
 
 for p in prob:
-    Y = np.loadtxt(path + "/Datos/histograma_L=%d_M=%d_prob=%.2f.txt"%(L,M,p))
+    
+    data = np.loadtxt(path + "/Datos/histograma_L=%d_M=%d_prob=%.2f.txt"%(L,M,p))
     # Normalizamos el histograma:
     #Y = Y/max(Y)
 
-    X = range(len(Y))
+    X = data[:,0]
+    Y = data[:,1]
 
 
     plt.loglog(X,Y,'.',label='prob = %.2f'%p)

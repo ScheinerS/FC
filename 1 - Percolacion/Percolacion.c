@@ -8,8 +8,8 @@
 #include <time.h>
 
 
-#define PROB	0.59
-#define L	4
+#define PROB	0.55
+#define L	64
 #define MUESTRAS        27000	// 27000
 #define IMPRIMIR_REDES	0	// Para no mostrar las redes en pantalla.
 #define GUARDAR_DATOS	0	// Para que se guarden los datos en un TXT.

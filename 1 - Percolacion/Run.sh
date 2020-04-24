@@ -6,7 +6,7 @@ gcc -Wall -o $1.e $1.c -lm
 ./$1.e
 }
 
-run 1-1
+run Percolacion
 #run Armar_histograma
 #run clustersfinal
 #run 1a_M
