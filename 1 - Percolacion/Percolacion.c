@@ -12,8 +12,6 @@
 #define L	64
 #define MUESTRAS        27000	// 27000
 #define IMPRIMIR_REDES	0	// Para no mostrar las redes en pantalla.
-#define GUARDAR_DATOS	0	// Para que se guarden los datos en un TXT.
-#define GUARDAR_HISTOGRAMA	1	// Para que se guarde el histograma en un TXT.
 
 
 int myrandom(double prob);
@@ -28,36 +26,36 @@ int main(){
  	
  	printf("L=%d\nM=%d\nprob=%.2f\n",L,MUESTRAS,PROB);
  	
-    int i,suma;                // agregado por Guillermo Frank
+    int i,suma;
 	double *hist;
-	FILE *fp;                  // agregado por Guillermo Frank
+	FILE *fp;
 
 	hist= (double*)malloc((L*L)*sizeof(double));
 
-        for (i=0;i<L*L;i++) *(hist+i) = 0.0;   // agregado por Guillermo Frank
+        for (i=0;i<L*L;i++) *(hist+i) = 0.0;
 	
-        suma = 0;                              // agregado por Guillermo Frank
+        suma = 0;
 
 	for(int m=0;m<MUESTRAS;m++){
 
-		srand(m+1);		        // agregado por Guillermo Frank
+		srand(m+1);
 
-		suma += llenar_matriz(hist);   // modificado por Guillermo Frank
+		suma += llenar_matriz(hist);
 		
 		printf("Muestra:\t%d / %d\r", m, MUESTRAS);
 		fflush(stdout);
 		}
 	
-        for (i=0;i<L*L;i++) *(hist+i) = (*(hist+i))/(double)suma;   // agregado por Guillermo Frank
+        for (i=0;i<L*L;i++) *(hist+i) = (*(hist+i))/(double)suma;
 		
 		char filename[255];
 		sprintf(filename,"Datos/histograma_L=%d_M=%d_prob=%.2f.txt",L,MUESTRAS,PROB);
 
-		fp = fopen(filename,"w");      //  fp = fopen("histograma.txt","w");                            // agregado por Guillermo Frank
+		fp = fopen(filename,"w");
 
-        for (i=0;i<L*L;i++) fprintf(fp,"%d %lf\n",i,*(hist+i));     // agregado por Guillermo Frank
+        for (i=0;i<L*L;i++) fprintf(fp,"%d %lf\n",i,*(hist+i));
  
-        fclose(fp);                                                 // agregado por Guillermo Frank
+        fclose(fp);
 
 	return 0;
 }
@@ -199,7 +197,6 @@ int llenar_matriz(double *hist){
         
 	free(etiquetas);
 
-	//if(GUARDAR_HISTOGRAMA) guardar_datos(hist);
 
         return s;
 
