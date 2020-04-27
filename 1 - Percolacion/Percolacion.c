@@ -10,7 +10,7 @@
 
 #define PROB	0.55
 #define L	64
-#define MUESTRAS        27000	// 27000
+#define MUESTRAS        27000
 #define IMPRIMIR_REDES	0	// Para no mostrar las redes en pantalla.
 
 
@@ -20,27 +20,44 @@ int myrandom(double prob);
 int etiqueta_verdadera(int *clase, int s);
 int imprimir(int *red,int N);
 int guardar_datos(double *X);
-int llenar_matriz(double *hist);
+int llenar_matriz(double *hist, float prob);
+int percolacion(float p);
 
 int main(){
+	
+	// Barrido de probabilidades:
+	float p_min = 0.55;
+	float p_max = 0.62;
+	float paso = 0.01;
+	
+	for(float p=p_min;p<=p_max;p=p+paso){
+		percolacion(p);
+		}
+	
+	return 0;
+}
+
+
+int percolacion(float p){
  	
- 	printf("L=%d\nM=%d\nprob=%.2f\n",L,MUESTRAS,PROB);
+ 	printf("\nL=%d\nM=%d\nprob=%.2f\n",L,MUESTRAS,p);
  	
-    int i,suma;
+    int i,suma, suma_perc;
 	double *hist;
 	FILE *fp;
 
 	hist= (double*)malloc((L*L)*sizeof(double));
 
-        for (i=0;i<L*L;i++) *(hist+i) = 0.0;
+	for (i=0;i<L*L;i++) *(hist+i) = 0.0;
 	
-        suma = 0;
+    suma = 0;
+    suma_perc = 0;	// suma de las que percolan
 
 	for(int m=0;m<MUESTRAS;m++){
 
 		srand(m+1);
-
-		suma += llenar_matriz(hist);
+		
+		suma += llenar_matriz(hist,p);
 		
 		printf("Muestra:\t%d / %d\r", m, MUESTRAS);
 		fflush(stdout);
@@ -49,7 +66,7 @@ int main(){
         for (i=0;i<L*L;i++) *(hist+i) = (*(hist+i))/(double)suma;
 		
 		char filename[255];
-		sprintf(filename,"Datos/histograma_L=%d_M=%d_prob=%.2f.txt",L,MUESTRAS,PROB);
+		sprintf(filename,"Datos/histograma_L=%d_M=%d_prob=%.2f.txt",L,MUESTRAS,p);
 
 		fp = fopen(filename,"w");
 
@@ -63,7 +80,7 @@ int main(){
 
 
 
-int llenar_matriz(double *hist){
+int llenar_matriz(double *hist, float prob){
 	int    i,s,s1,s2,frag,j,N;
 	int *red, *clase, *etiquetas;
 	s =1;
@@ -78,7 +95,7 @@ int llenar_matriz(double *hist){
 	//Generamos la matriz de unos y ceros:
 	for(i=0;i<N*N;i++)
 		{
-			*(red+i)=myrandom(PROB);
+			*(red+i)=myrandom(prob);
 		}
 	if(IMPRIMIR_REDES){
 		printf("Red:\n");
@@ -154,15 +171,11 @@ int llenar_matriz(double *hist){
 		  }
 		}
 	}
-	
-//--------------Cambiado por Guillermo Frank:
 
 	for(i=0;i<N*N;i++){
                 s = *(red+i);
 		*(red+i) = etiqueta_verdadera(clase, s);
 		}
-
-//-------------------------------------------
 
 	free(clase);
 	
@@ -171,8 +184,6 @@ int llenar_matriz(double *hist){
 		imprimir(red,N);
 		printf("\n");
 	}
-
-//-------------- Modificado por Guillermo Frank-----------------
 
 	etiquetas = (int*)malloc((N*N)*sizeof(int));
 
@@ -196,7 +207,7 @@ int llenar_matriz(double *hist){
 	*hist = 0.0;
         
 	free(etiquetas);
-
+	//printf("\ns=%d\n",s);
 
         return s;
 
@@ -204,7 +215,7 @@ int llenar_matriz(double *hist){
 	
 }
 
-
+/*
 
 int guardar_datos(double *X){
 
@@ -227,13 +238,14 @@ int guardar_datos(double *X){
 	return 0;
 }
 
+*/
 
 int etiqueta_verdadera(int *clase, int s)
 	{ while(*(clase+s)<0){
 		s = - *(clase+s);
 		}
 		
-	return s;    // corregido por Guillermo Frank
+	return s;
 }
 
 int imprimir(int *red,int N){
