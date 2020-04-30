@@ -20,7 +20,7 @@ int myrandom(double prob);
 int etiqueta_verdadera(int *clase, int s);
 int imprimir(int *red,int N);
 int guardar_datos(double *X);
-int llenar_matriz(double *hist, float prob,int *pp);
+int llenar_matriz(double *hist, float prob);
 int percolacion(float p);
 int perco(int *red,int n);
 
@@ -47,7 +47,7 @@ int percolacion(float p){
  	
  	printf("\nL=%d\nM=%d\nprob=%.2f\n",L,MUESTRAS,p);
  	
-    int i,suma, suma_perc,pp[1];
+    int i,suma, suma_perc;
 	double *hist;
 	FILE *fp;
 
@@ -62,10 +62,10 @@ int percolacion(float p){
 
 		srand(m+1);
 		
-		suma += llenar_matriz(hist,p,pp);
+		suma += llenar_matriz(hist,p);
 		
 		// Esta línea no anda porque *red se define dentro de la función llenar_matriz. ¿Cómo podemos hecer que la función nos devuelva las dos cosas?
-                suma_perc += (*pp);        // ACA IRIA EL BLOQUE QUE ANALIZA SI PERCOLÓ O NO.
+        //suma_perc += perco(red, L)        // ACA IRIA EL BLOQUE QUE ANALIZA SI PERCOLÓ O NO.
 		
 		printf("Muestra:\t%d / %d\r", m, MUESTRAS);
 		fflush(stdout);
@@ -127,7 +127,7 @@ int perco(int *red,int n)
   return s;
 }
 
-int llenar_matriz(double *hist, float prob,int *pp){
+int llenar_matriz(double *hist, float prob){
 	int    i,s,s1,s2,frag,j,N;
 	int *red, *clase, *etiquetas;
 	s =1;
@@ -256,16 +256,36 @@ int llenar_matriz(double *hist, float prob,int *pp){
 	free(etiquetas);
 	//printf("\ns=%d\n",s);
 
-// Esta línea causa un segmentation fault:
-//        *pp = perco(red,L);  // agregado por Guillermo Frank
-        
-        free(red);           // agregado por Guillermo Frank
-
         return s;
 
+//--------------------------------------------------------------
 	
 }
 
+/*
+
+int guardar_datos(double *X){
+
+	char filename[255];
+	sprintf(filename,"Tamaños_L=%d_M=%d_prob=%.2f.txt",L,MUESTRAS,PROB);
+	// sprintf(filename,"Tamaños_L=32.txt");
+	
+	// Creamos el archivo:
+	FILE *fp=fopen(filename,"w");
+	
+	int i;
+	for(i = 0; i < L*L; i++)
+		{
+		fprintf(fp,"%4f\n",*(X+i));
+		}
+	
+	// Cerramos el archivo:
+	fclose(fp);
+
+	return 0;
+}
+
+*/
 
 int etiqueta_verdadera(int *clase, int s)
 	{ while(*(clase+s)<0){
