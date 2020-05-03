@@ -20,29 +20,39 @@ NumberSize = 12
 
 plt.close('all')
 
-plt.rc('text', usetex=True)
+if os.name == 'posix':   # Linux
+    Linux = True
+
+plt.rc('text', usetex=Linux)
 plt.rc('font', family='serif')
 
 #%%
+prob_min = 0.55
+prob_max = 0.62
+prob_paso = 0.01
 
-prob = [0.55, 0.59, 0.61]
-L = 32
+prob = np.arange(prob_min, prob_max + prob_paso, prob_paso)
+#prob = [0.55, 0.59, 0.61]
+L = 64
 M = 27000
 
 plt.figure()
 
 for p in prob:
-    
-    data = np.loadtxt(path + "/Datos/histograma_L=%d_M=%d_prob=%.2f.txt"%(L,M,p))
+    try:
+        data = np.loadtxt(path + "/Datos/histograma_L=%d_M=%d_prob=%.2f.txt"%(L,M,p))
     # Normalizamos el histograma:
     #Y = Y/max(Y)
 
-    X = data[:,0]
-    Y = data[:,1]
+        X = data[:,0]
+        Y = data[:,1]
 
 
-    plt.loglog(X,Y,'.',label='prob = %.2f'%p)
-
+        plt.loglog(X,Y,'.',label='prob = %.2f'%p)
+    
+    except:
+        print('No existen datos para p = %.2f'%p)
+    
 plt.legend(loc='best', fontsize=LegendSize)
 plt.title(r'L=%d, %d muestras'%(L,M), fontsize=TitleSize)
 plt.xlabel(r'$Tama\tilde{n}o$', fontsize=AxisLabelSize)
