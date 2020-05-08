@@ -1,7 +1,27 @@
+import sys
+import os
 import matplotlib.pyplot as plt
 import csv
 import numpy as np
 
+
+path = os.path.dirname(os.path.realpath('__file__'))
+sys.path.append(path)
+
+TitleSize = 15
+AxisLabelSize = 15
+LegendSize = 12
+NumberSize = 12
+
+plt.close('all')
+
+if os.name == 'posix':
+    Linux = True
+
+plt.rc('text', usetex=Linux)
+plt.rc('font', family='serif')
+
+#%%
 epsilon=[]
 
 for i in range(0,1):
