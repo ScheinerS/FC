@@ -34,8 +34,8 @@ plt.show()
 xd=xt[37:48]
 xi=xt[27:38]
 
-yd=[]
-yi=[]
+yd=[]   # derecha
+yi=[]   # izquierda
 
 for i in range(len(xd)):
     yd.append(-67569.97036364*xd[i]+53290.60052909)
@@ -44,3 +44,7 @@ for i in range(len(xd)):
 for i in range(len(yd)):
     if yd == yi:
         print(yd)
+
+# 
+#plt.plot(xi,yi)
+#plt.plot(xd,yd)

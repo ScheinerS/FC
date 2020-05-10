@@ -1,6 +1,28 @@
+import sys
+import os
 import matplotlib.pyplot as plt
+from matplotlib import rcParams, cycler
 import csv
 import numpy as np
+
+
+path = os.path.dirname(os.path.realpath('__file__'))
+sys.path.append(path)
+
+TitleSize = 15
+AxisLabelSize = 15
+LegendSize = 12
+NumberSize = 12
+
+plt.close('all')
+
+if os.name == 'posix':   # Linux
+    Linux = True
+
+plt.rc('text', usetex=Linux)
+plt.rc('font', family='serif')
+
+#%%
 
 name = []
 
@@ -15,6 +37,11 @@ for i in range(10,36):
                 epsilon.append(float(row[0]))
 
 epsilon=np.abs(epsilon)
+
+# Para una transición suave de colores entre las curvas:
+N=16    # porque tenemos 16 curvas
+cmap = plt.cm.viridis #coolwarm, viridis, plasma, inferno, magma, cividis
+rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N)))
 
 for i in range(20,36):
     x1=[] #Probabilidad dim = 4
@@ -43,17 +70,16 @@ for i in range(20,36):
         if y1[j] != 0:
             x_t.append(x1[j])
             y_t.append(y1[j])
+    plt.semilogy(x_t,y_t,".",label='s='+name[i-10].split('_')[1])
+    #plt.plot(x_t,y_t,"o",label=name[i-10])
 
 
-    plt.plot(x_t,y_t,"o",label=name[i-10])
 
-    
-plt.xlabel("Probabilidad")
-plt.ylabel("n_s/n_s(p_c)")
-plt.title("Función f(x)")
-
-#plt.axis([0.1,0.7,0,100])
-plt.legend()
+#plt.legend(loc='best', fontsize=LegendSize)
+#plt.title(r"Función f(x)", fontsize=TitleSize)
+plt.xlabel(r"Probabilidad", fontsize=AxisLabelSize)
+plt.ylabel(r"{n_{s}}/{n_{s}(p_{c})}", fontsize=AxisLabelSize)
+plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
         
 algo=[]
@@ -64,3 +90,5 @@ for i in range(10,36):
 print(len(algo))
 print(algo)
 
+if Linux:
+    plt.savefig(path + '/scaling.png')

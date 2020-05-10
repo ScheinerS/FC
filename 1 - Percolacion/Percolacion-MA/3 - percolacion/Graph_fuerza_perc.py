@@ -1,6 +1,7 @@
 import sys
 import os
 import matplotlib.pyplot as plt
+from matplotlib import rcParams, cycler
 import csv
 import numpy as np
 from scipy.stats import chisquare
@@ -22,9 +23,6 @@ plt.rc('text', usetex=Linux)
 plt.rc('font', family='serif')
 
 #%%
-import matplotlib.pyplot as plt
-import csv
-
 
 x1=[] #Probabilidad dim = 4
 y1=[] #Intensidad cluster percolante dim = 4
@@ -103,9 +101,13 @@ with open("perc_128", "r") as f:
             x6.append(float(row[0]))
             y6.append(float(row[1]))
             
+# Para una transición suave de colores entre las curvas:
+N=5    # cantidad de curvas
+cmap = plt.cm.inferno #coolwarm, viridis, plasma, inferno, magma, cividis
+rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N)))
 
-for i in range(6):
-    plt.plot(xs[i],ys[i],label=name[i])
+for i in range(N):
+    plt.plot(xs[i],ys[i],label=name[i],zorder=i)
 
 #plt.figure()
 plt.xlabel(r'Probabilidad', fontsize=AxisLabelSize)
