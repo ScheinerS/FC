@@ -1,9 +1,10 @@
 import sys
 import os
 import matplotlib.pyplot as plt
+from matplotlib import rcParams, cycler
 import csv
 import numpy as np
-from scipy.stats import chisquare
+#from scipy.stats import chisquare
 
 path = os.path.dirname(os.path.realpath('__file__'))
 sys.path.append(path)
@@ -102,6 +103,12 @@ for i in range(len(xs)):
             ysf[i].append(ys[i][j])
  
 #%%
+            
+# Para una transición suave de colores entre las curvas:
+N=8    # porque tenemos 16 curvas
+cmap = plt.cm.hot #coolwarm, viridis, plasma, inferno, magma, cividis
+rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N)))
+
 for i in range(2,len(xsf)-2):
     #plt.plot(np.log(xsf[i]),np.log(ysf[i]),style[i],label="Prob. "+ps[i+1])
     plt.plot(np.log(xsf[i]),np.log(ysf[i]),'o',label="Prob. "+ps[i+1])          
@@ -109,13 +116,13 @@ for i in range(2,len(xsf)-2):
     fit_fn.append(np.poly1d(fit[i-2]))
     plt.plot(np.log(xsf[i]), fit_fn[i-2](np.log(xsf[i])), '--k')
     print("Probabilidad %s" %(ps[i+1]))
-    print(chisquare(ysf[i],fit_fn[i-2](np.log(xsf[i]))))
+   # print(chisquare(ysf[i],fit_fn[i-2](np.log(xsf[i]))))
     print("Tau = %f" %(fit[i-2][0]))
 
 
 #plt.figure()
-plt.xlabel(r'$s$', fontsize=AxisLabelSize)
-plt.ylabel(r'$n_{s}$', fontsize=AxisLabelSize)
+plt.xlabel(r'$\log(s)$', fontsize=AxisLabelSize)
+plt.ylabel(r'$\log(n_{s})$', fontsize=AxisLabelSize)
 
 plt.title(r'$L=128$', fontsize=TitleSize)
 plt.legend(loc='best', fontsize=LegendSize)
