@@ -54,7 +54,7 @@ fit.append(np.polyfit(np.log(s), np.log(epsilon), 1))
 fit_fn.append(np.poly1d(fit[0]))
 plt.plot(np.log(s), fit_fn[0](np.log(s)), '--k')
 
-    
+
 plt.plot(np.log(s),np.log(epsilon),"o")
 
 
