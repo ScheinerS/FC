@@ -1,3 +1,5 @@
+import sys
+import os
 import matplotlib.pyplot as plt
 import csv
 import numpy as np
@@ -45,7 +47,7 @@ plt.plot(np.log(x1), fit_fn[0](np.log(x1)), '--k')
 plt.plot(np.log(x1),np.log(y1),"o")
 
 #plt.legend(loc='best', fontsize=LegendSize)
-plt.title(r"Masa de Cluster Percolante vs Dimensi\'on", fontsize=TitleSize)
+#plt.title(r"Masa de Cluster Percolante vs Dimensi\'on", fontsize=TitleSize)
 plt.xlabel(r"Dimensi\'on", fontsize=AxisLabelSize)
 plt.ylabel(r"Masa Cluster Percolante", fontsize=AxisLabelSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
