@@ -19,13 +19,14 @@ run () {
 #################################
 # PROGRAMAS A CORRER:
 
-run Percolacion
+#run Percolacion
 #run Armar_histograma
 #run clustersfinal
 #run gamma
+run Momento_de_orden_dos
 
 #################################
 
 # Para apagar la máquina al finalizar:
 alarm
-shutdown
+#shutdown
