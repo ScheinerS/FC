@@ -6,7 +6,7 @@
 #include "funcion_trial.h"
 #include "funcion_correlacion.h"
 
-#define N   500  //Cantidad de puntos
+#define N   10000    //Cantidad de puntos
 #define X0  0      //Punto inicial
 
 //Metrópolis Montecarlo
@@ -17,13 +17,13 @@ int main()
 	double  x,p,w,x0,*m,*c,*l,M,C,L;
 	FILE   *fp;
 	
-	n=N-1;                            //nos dice que vecinos miramos N-n=N-(N-1)=1. Sirve para la correlación.
+	n=N-1;                          //nos dice que vecinos miramos N-n=N-(N-1)=1. Sirve para la correlación.
 	m  = malloc(N*sizeof(double)); 	//reservamos espacio para la distribución de x	
 	c  = malloc(n*sizeof(double));  //reservamos espacio para los valores de correlación
 	l  = malloc(N*sizeof(double));  //reservamops espacio para w(x)
 	x0=X0;                          //punto de inicio
 
-	fp = fopen("correlacion.csv","w");
+	fp = fopen("correlacion(delta=0.1).csv","w");
 
 	for(i=0;i<N;i++)
 	{
@@ -34,8 +34,8 @@ int main()
 		x = trial(x0);
 		w = exp(-0.5*(x*x-x0*x0));
 		if (p<w) x0 = x;
-		*(m+i)=x; 							//distribución de x
-		*(l+i)=w;
+		*(m+i)=x; 							//posible distribucion normal de x
+		*(l+i)=w;							//valores de w, nos sirve para determinar los valores de x admisibles
 	}
 
 	correlation(c,m,n);

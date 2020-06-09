@@ -1,4 +1,4 @@
-//Función correlación entre el paso i y el paso i+n
+//Función correlación entre el paso i y el paso i+1
 
 int correlation(double *c,double *m,int n)
 {

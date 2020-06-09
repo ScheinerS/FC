@@ -1,14 +1,42 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-correlacion = np.loadtxt('correlacion.csv', skiprows=0, delimiter=' ', unpack=True) 
+correlacion = np.loadtxt('correlacion(delta=1).csv', skiprows=0, delimiter=' ', unpack=True) 
 
-i=correlacion[0]
-L=correlacion[1]
-M=correlacion[2]
-C=correlacion[3]
+i=correlacion[0] #numero de pasos
+L=correlacion[1] #valores de x
+M=correlacion[2] #valores de w, 
+C=correlacion[3] #valores de correlacion
 
-plt.plot(i, M, '-r', label='y=0.63x' )
+#%%
+#Histograma de la distribucion de pasos para delta=1
+
+plt.hist(L, bins=70)
+
+plt.title('Delta=1.0', fontsize=16)
+plt.xlabel('x', fontsize=14)
+plt.ylabel('', fontsize=14)
+
+plt.grid()
+plt.legend()
+plt.show()
+
+#%%
+#Histograma de la distribucion de pasos para delta=0.1
+
+plt.hist(L, bins=70)
+
+plt.title('Delta=0.1', fontsize=16)
+plt.xlabel('x', fontsize=14)
+plt.ylabel('', fontsize=14)
+
+plt.grid()
+plt.legend()
+plt.show()
+
+#%%
+##Debería ser el gráfico para la correlación, pero todavía no lo sé hacer.
+plt.plot(i, C, '.r', label='y=0.63x' )
 
 plt.title('', fontsize=16)
 plt.xlabel('x', fontsize=14)
