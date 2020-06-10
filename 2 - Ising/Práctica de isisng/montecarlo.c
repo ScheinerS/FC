@@ -24,7 +24,7 @@ int main()
 	x0=X0;                          //punto de inicio
 
 	fp = fopen("correlacion(delta=0.1).csv","w");
-
+	fprintf(fp,"pasos x w correlacion\n");
 	for(i=0;i<N;i++)
 	{
 		printf("Proceso1/2:\t%d / %d\r", i, N);
@@ -34,8 +34,10 @@ int main()
 		x = trial(x0);
 		w = exp(-0.5*(x*x-x0*x0));
 		if (p<w) x0 = x;
-		*(m+i)=x; 							//posible distribucion normal de x
-		*(l+i)=w;							//valores de w, nos sirve para determinar los valores de x admisibles
+		//if (i%100==0) *(m+i)=x; 			//posible distribucion normal de x
+		//if (i%100==0) *(l+i)=w;				//valores de w, nos sirve para determinar los valores de x admisibles
+		*(m+i)=x0;
+		*(l+i)=w;
 	}
 
 	correlation(c,m,n);
