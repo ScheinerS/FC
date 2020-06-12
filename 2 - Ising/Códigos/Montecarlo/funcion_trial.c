@@ -1,5 +1,5 @@
 //Función Trial. Nos dice el tamaño de laso que damos, desde x0 hasta x.
-#define DELTA 0.1
+#define DELTA 1
 double trial(double x0)
 {
 double p,x;
