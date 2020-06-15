@@ -23,3 +23,18 @@ int flip(double *red,double *tabla,int N,int L)
 
 	return 0;
 }
+
+//Tabla de nenergías
+//Be va a ser el0 B* del hamiltoneano, y Je el J*
+double exp(double x)
+*(tabla+0) =exp(-8*Je-2*Be)
+*(tabla+1) =exp(-4*Je-2*Be)
+*(tabla+2) =exp(-0*Je-2*Be)
+*(tabla+3) =exp(+4*Je-2*Be)
+*(tabla+4) =exp(+8*Je-2*Be)
+*(tabla+5) =exp(0)
+*(tabla+6) =exp(-8*Je2*Be)
+*(tabla+7) =exp(-4*Je+2*Be)
+*(tabla+8) =exp(-0*Je+2*Be)
+*(tabla+9) =exp(+4*Je+2*Be)
+*(tabla+10)=exp(+8*Je+2*Be)
