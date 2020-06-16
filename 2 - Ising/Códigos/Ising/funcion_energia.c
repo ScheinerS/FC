@@ -3,6 +3,8 @@
 
 double energias(double Be,double Je)
 {
+	double *tabla;
+
 	tabla = malloc(13*sizeof(double));
 
 	*(tabla+0) =exp(-8*Je-2*Be);
@@ -13,7 +15,7 @@ double energias(double Be,double Je)
 	*(tabla+5) =0;
 	*(tabla+6) =0;
 	*(tabla+7) =0;
-	*(tabla+8) =exp(-8*Je2*Be);
+	*(tabla+8) =exp(-8*Je+2*Be);
 	*(tabla+9) =exp(-4*Je+2*Be);
 	*(tabla+10)=exp(-0*Je+2*Be);
 	*(tabla+11)=exp(+4*Je+2*Be);

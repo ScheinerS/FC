@@ -1,8 +1,9 @@
-//creamos la re de espines
+//creamos la red de espines
 
-int poblar(int *red, float p, int L)
+int poblar(float p, int L,double *red)
 { float random;
   int i, j;
+  
 
   for (i=0;i<L;i++)
   { 
