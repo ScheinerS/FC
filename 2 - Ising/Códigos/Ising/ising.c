@@ -7,14 +7,15 @@
 #include "funcion_flip.h"
 #include "funcion_poblar.h"
 #include "funcion_imprimir.h"
+//#include "funcion_conteo.h"
 
-#define N0 		36   	//Cantidad de puntos
-#define DIM 	6       //dim de la red
+#define N0 	 	1100	//Cantidad de puntos
+#define DIM 	32       //dim de la red
 #define BE 		0       //campo magnético/kT
 #define JE 		0.1          //acoplamiento entre espines/kT
-#define JE_MAX 	0.8
+#define JE_MAX 	0.6
 #define P 		0.5	       //probabilaidad inicial de ocupación
-#define PASO 	0.01		//tamaño del paso
+#define PASO 	0.001		//tamaño del paso
 
 int main()
 {
@@ -31,11 +32,21 @@ int main()
 	
 	red= malloc(L*L*sizeof(int));
 	tabla = malloc(13*sizeof(double));
-
-
-	poblar(p,L,red);
+	
+	poblar(p,L,red);					//creamos la red de espines con 1 y -1
+	
 	imprimir(red,L);
 
+	energias(Be,Je,tabla);				//calculamos las energás para las condiciones iniciales y las posibles configuraciones
+	
+	for(i=0;i<N;i++)					//termalizamos la red
+	{
+		flip(red,tabla,N,L);
+		printf("Proceso1/2:\t%d / %d\r", i, N);
+		fflush(stdout);
+	}
+
+	imprimir(red,L);
 	
 	for(Je=0.1;Je<Je_max;Je+=paso)
 	{
@@ -52,11 +63,6 @@ int main()
 				printf("%lf\n",*(tabla+i));
 			}
 
-			for(i=0;i<N;i++)
-			{
-				flip(red,tabla,N,L);
-			}
-
 		imprimir(red,L);
 	}
 
@@ -68,3 +74,4 @@ int main()
 #include "funcion_flip.c"
 #include "funcion_poblar.c"
 #include "funcion_imprimir.c"
+//#include "funcion_conteo.c"
