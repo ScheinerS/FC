@@ -1,6 +1,6 @@
 //creamos la red de espines
 
-int poblar(float p, int L,double *red)
+int poblar(float p, int L,int *red)
 { float random;
   int i, j;
   
