@@ -6,8 +6,8 @@ int conteo(int *red, int L)
   for (i=0;i<L;i++)
     { for (j=0;j<L;j++)
         {
-          c+=*(red+i*dim+j);
+          c+=*(red+L*i+j);
         }
     }
-    return c;
+  return c;
 }
