@@ -19,9 +19,11 @@
 
 int main()
 {
-	int i,L,N,*red;
+	int L,N,*red;
 	double Be,Je,Je_max,p,paso,*tabla;
 
+
+    srand(time(NULL));
 	N=N0;
 	L=DIM;
 	paso=PASO;
@@ -39,13 +41,8 @@ int main()
 
 	energias(Be,Je,tabla);				//calculamos las energás para las condiciones iniciales y las posibles configuraciones
 	
-	for(i=0;i<N;i++)					//termalizamos la red
-	{
-		flip(red,tabla,N,L);
-		printf("Proceso1/2:\t%d / %d\r", i, N);
-		fflush(stdout);
-	}
-
+	flip(red,tabla,N,L);				//termalizamos la red
+	
 	imprimir(red,L);
 	
 	for(Je=0.1;Je<Je_max;Je+=paso)
@@ -53,7 +50,7 @@ int main()
 		energias(Be,Je,tabla);
 
 
-			for(i=0;i<5;i++)
+			/*for(i=0;i<5;i++)
 			{
 				printf("%lf\n",*(tabla+i));
 			}
@@ -61,9 +58,9 @@ int main()
 			for(i=8;i<13;i++)
 			{
 				printf("%lf\n",*(tabla+i));
-			}
+			}*/
 
-		imprimir(red,L);
+		//imprimir(red,L);
 	}
 
 	return 0;
