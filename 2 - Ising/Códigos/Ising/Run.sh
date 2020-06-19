@@ -12,7 +12,7 @@ run () {
 	echo '\n'
 	echo $1
 	echo '\n'
-	gcc -Wall -o $1.e $1.c -lm
+	gcc -Wall -O3 -o $1.e $1.c -lm
 	./$1.e
 }
 
