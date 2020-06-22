@@ -8,6 +8,7 @@
 #include "funcion_poblar.h"
 #include "funcion_imprimir.h"
 #include "funcion_conteo.h"
+#include "funcion_imprimir_txt.h"
 
 #define N0 	 	1100		//Cantidad de puntos
 #define DIM 	32       	//dim de la red
@@ -36,14 +37,13 @@ int main()
 	tabla = malloc(13*sizeof(double));
 	
 	poblar(p,L,red);					//creamos la red de espines con 1 y -1
-	
-	imprimir(red,L);
 
 	energias(Be,Je,tabla);				//calculamos las energás para las condiciones iniciales y las posibles configuraciones
 	
-	flip(red,tabla,N,L);				//termalizamos la red
+	flip(red,tabla,N*N,L);				//termalizamos la red
 	
-	imprimir(red,L);
+	imprimir_txt(red,L);
+	
 	
 	for(Je=0.1;Je<Je_max;Je+=paso)
 	{
@@ -76,9 +76,11 @@ int main()
 	return 0;
 }
 
+
 #include "funcion_random.c"
 #include "funcion_energia.c"
 #include "funcion_flip.c"
 #include "funcion_poblar.c"
 #include "funcion_imprimir.c"
 #include "funcion_conteo.c"
+#include "funcion_imprimir_txt.c"

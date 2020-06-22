@@ -11,8 +11,8 @@ int flip(int *red,double *tabla,int N,int L)
 		ii = rand()%L; 									//nos da el resto entre el número al azar y L, con lo cual ii<L
 		jj = rand()%L;									//nos da el resto entre el número al azar y L, con lo cual jj<L
 		s  = *(red+L*ii+jj);							//el espín en el lugar ii,jj
-		s1 = *(red+L*((ii-1)+L)%L+jj); 					//vecino de arriba
-		s2 = *(red+L*((ii+1)+L)%L+jj);					//vecino de abajo
+		s1 = *(red+L*(((ii-1)+L)%L)+jj); 					//vecino de arriba
+		s2 = *(red+L*(((ii+1)+L)%L)+jj);					//vecino de abajo
 		s3 = *(red+L*ii+((jj+1)+L)%L);					//vecino de la derecha
 		s4 = *(red+L*ii+((jj-1)+L)%L);					//vecino de la izquierda
 		h  = 2*((-s-s)+2)+2+(-s-s)*(s1+s2+s3+s4)/4;		//calculamos el lugar en la tabla de energías
