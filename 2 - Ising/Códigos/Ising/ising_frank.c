@@ -55,6 +55,8 @@ int main()
     	{
       		flip(red,tabla,energia,m+h,e+h);
 
+      		correlation(c,m,n);
+
       		fprintf(fp,"%d %lf %lf\n",h,*(m+h),*(e+h));
     	}
    }
