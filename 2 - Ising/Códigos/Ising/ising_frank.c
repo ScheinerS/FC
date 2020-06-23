@@ -4,21 +4,24 @@
 #include <time.h>
 #include <string.h>
 
-#define N 500000
-#define L 32
-#define J 0.5
+#define N    500000
+#define L    32
+#define J  	 0.1
+#define JMAX 0.6
+#define PASO 0.001
 
 int    poblar(int *red,int n);
 int    build_table(double *tabla, double *energia, double j);
 int    observables(int *red,double *m,double *e,double b,int n);
 int    flip(int *red, double *tabla, double *energia, double *m,double *e);
 double myrand();
+int correlation(double *c,double *m,int n);
 
 int main()
 {
   int    h,k,*red;
   char   filename[500];
-  double *tabla,*energia,*e,*m,j;
+  double *tabla,*energia,*e,*m,j,i,jmax,paso;
   FILE   *fp;
 
   strcpy(filename,"ising.dat");
@@ -31,7 +34,9 @@ int main()
   e       = (double*) malloc(N*sizeof(double));
   m       = (double*) malloc(N*sizeof(double));
  
-  j = J;
+  j   = J;
+  jmax=JMAX;
+  paso=PASO;
 
   build_table(tabla,energia,j);
 
@@ -41,12 +46,18 @@ int main()
 
   fprintf(fp,"%d %lf %lf\n",0,*(m+0),*(e+0));
 
-  for(h=1;h<N;h++)
-    {
-      flip(red,tabla,energia,m+h,e+h);
+  
+  for(i=j;i<jmax;j+=paso)
+  {
+  	build_table(tabla,energia,j);
 
-      fprintf(fp,"%d %lf %lf\n",h,*(m+h),*(e+h));
-    }
+		for(h=1;h<N;h++)
+    	{
+      		flip(red,tabla,energia,m+h,e+h);
+
+      		fprintf(fp,"%d %lf %lf\n",h,*(m+h),*(e+h));
+    	}
+   }
 
   // configuracion final
 
@@ -184,6 +195,30 @@ int observables(int *red,double *m,double *e,double b,int n)
   *e = (*e)/(double)(n*n);
  
   return 0;
+}
+
+int correlation(double *c,double *m,int n)
+{
+	int i,k;
+	double xi,xk,s0,s1,s2;
+	
+	for (k=0;k<n;k++)
+	{
+		s0 = 0.0;
+		s1 = 0.0;
+		s2 = 0.0;
+		
+		for (i=0;i<N-n;i++)
+		{
+			xi = *(m+i);
+			xk = *(m+i+k);
+			s1 += xi/(double)(N-n);
+			s0 += xi*xk/(double)(N-n);
+			s2 += xi*xi/(double)(N-n);
+		}
+		*(c+k) = (s0-s1*s1)/(s2-s1*s1);
+	}
+	return 1;
 }
 
 
