@@ -20,7 +20,7 @@ run () {
 # PROGRAMAS A CORRER:
 
 #run Percolacion
-run ising
+run ising_frank
 
 #################################
 

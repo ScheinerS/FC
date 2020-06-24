@@ -4,11 +4,13 @@
 #include <time.h>
 #include <string.h>
 
-#define N    500000
-#define L    32
-#define J  	 0.1
-#define JMAX 0.6
-#define PASO 0.001
+#define N	500000
+#define L	32
+#define J	0.1
+#define JMAX	0.6
+#define PASO	0.001
+#define UMBRAL_CORRELACION	0.1
+#define MUESTRAS	1000
 
 int    poblar(int *red,int n);
 int    build_table(double *tabla, double *energia, double j);
@@ -21,7 +23,7 @@ int main()
 {
   int    h,k,*red;
   char   filename[500];
-  double *tabla,*energia,*e,*m,j,i,jmax,paso;
+  double *tabla,*energia,*e,*m,j,i,jmax,paso, *c, corr;
   FILE   *fp;
 
   strcpy(filename,"ising.dat");
@@ -46,19 +48,25 @@ int main()
 
   fprintf(fp,"%d %lf %lf\n",0,*(m+0),*(e+0));
 
-  
-  for(i=j;i<jmax;j+=paso)
+  // Barremos los valores de J:
+  for(i=j;i<jmax;i+=paso)
   {
+  	// Construimos la tabla para esta temperatura:
   	build_table(tabla,energia,j);
-
-		for(h=1;h<N;h++)
-    	{
-      		flip(red,tabla,energia,m+h,e+h);
-
-      		correlation(c,m,n);
-
-      		fprintf(fp,"%d %lf %lf\n",h,*(m+h),*(e+h));
-    	}
+	// Calculamos la correlación:
+	corr=correlation(c,m,n);
+	// Si la correlación es mayor que el umbral, hacemos otras cien rondas de "flipeo":
+	while(UMBRAL_CORRELACION<corr){
+		for(h=1;h<100;h++){
+      			flip(red,tabla,energia,m+h,e+h);
+	      		}
+	      	// Actualizamos la correlación:
+	      	corr=correlation(c,m,n);
+		}
+	// Una vez que la correlación es suficientemente baja, tomamos muestras para guardar en el archivo:
+	for(int muestra; muestra<MUESTRAS; muestra++){
+		fprintf(fp,"%d %lf %lf\n",h,*(m+h),*(e+h));
+		}
    }
 
   // configuracion final
