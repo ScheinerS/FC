@@ -4,13 +4,13 @@
 #include <time.h>
 #include <string.h>
 
-#define N	500000
+#define N	500
 #define L	32
 #define J	0.1
 #define JMAX	0.6
-#define PASO	0.001
+#define PASO	0.1
 #define UMBRAL_CORRELACION	0.1
-#define MUESTRAS	1000
+#define MUESTRAS	50
 
 int    poblar(int *red,int n);
 int    build_table(double *tabla, double *energia, double j);
@@ -21,7 +21,7 @@ int correlation(double *c,double *m,int n);
 
 int main()
 {
-  int    h,k,*red;
+  int    h,k,*red,n;
   char   filename[500];
   double *tabla,*energia,*e,*m,j,i,jmax,paso, *c, corr;
   FILE   *fp;
@@ -35,10 +35,14 @@ int main()
   energia = (double*) malloc(5*sizeof(double));
   e       = (double*) malloc(N*sizeof(double));
   m       = (double*) malloc(N*sizeof(double));
+  n=100;
+  c       = malloc(n*sizeof(double));
  
   j   = J;
   jmax=JMAX;
   paso=PASO;
+  
+  corr=1;
 
   build_table(tabla,energia,j);
 
@@ -46,26 +50,32 @@ int main()
 
   observables(red,m,e,j,L);
 
-  fprintf(fp,"%d %lf %lf\n",0,*(m+0),*(e+0));
+  fprintf(fp,"%d %lf %lf %lf\n",0,*(m+0),*(e+0),j);
 
   // Barremos los valores de J:
   for(i=j;i<jmax;i+=paso)
   {
-  	// Construimos la tabla para esta temperatura:
-  	build_table(tabla,energia,j);
-	// Calculamos la correlación:
-	corr=correlation(c,m,n);
-	// Si la correlación es mayor que el umbral, hacemos otras cien rondas de "flipeo":
-	while(UMBRAL_CORRELACION<corr){
-		for(h=1;h<100;h++){
+  		j=i;
+  		// Construimos la tabla para esta temperatura:
+  		build_table(tabla,energia,j);
+		// Calculamos la correlación:
+		//corr=correlation(c,m,n);
+		// Si la correlación es mayor que el umbral, hacemos otras cien rondas de "flipeo":
+		while(UMBRAL_CORRELACION<corr)
+		{
+			for(h=1;h<100;h++)
+			{
       			flip(red,tabla,energia,m+h,e+h);
-	      		}
-	      	// Actualizamos la correlación:
-	      	corr=correlation(c,m,n);
+	      	}
+	        // Actualizamos la correlación:
+	      	correlation(c,m,n);
+	      	corr=*(c+n-1);
+	      	printf("%lf\n",*(c+n-1));
 		}
-	// Una vez que la correlación es suficientemente baja, tomamos muestras para guardar en el archivo:
-	for(int muestra; muestra<MUESTRAS; muestra++){
-		fprintf(fp,"%d %lf %lf\n",h,*(m+h),*(e+h));
+		// Una vez que la correlación es suficientemente baja, tomamos muestras para guardar en el archivo:
+		for(int muestra; muestra<MUESTRAS; muestra++)
+		{
+			fprintf(fp,"%d %lf %lf %lf\n",h,*(m+h),*(e+h),j);
 		}
    }
 
