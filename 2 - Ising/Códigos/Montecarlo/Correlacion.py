@@ -70,7 +70,7 @@ for delta in [0.1, 1]:
 
 plt.xlabel(r'Pasos', fontsize=AxisLabelSize)
 plt.ylabel(r'Correlaci\'on', fontsize=AxisLabelSize)
-plt.title(r'$\delta = %g$'%delta, fontsize=TitleSize)
+#plt.title(r'$\delta = %g$'%delta, fontsize=TitleSize)
 plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
