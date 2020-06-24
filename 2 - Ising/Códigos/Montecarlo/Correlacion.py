@@ -54,7 +54,7 @@ for delta in [0.1, 1]:
 
     ## Gráfico de la función de correlación:
     plt.figure()
-    plt.plot(k, C, '-r', label='delta=0.1' )
+    plt.plot(k, C, '-r', label=r'delta=0.1' )
 
     plt.xlabel(r'Pasos', fontsize=AxisLabelSize)
     plt.ylabel(r'Correlaci\'on', fontsize=AxisLabelSize)
@@ -62,3 +62,17 @@ for delta in [0.1, 1]:
     plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
     plt.show()
     plt.savefig('Correlacion_delta=%g.png'%delta)
+    
+    
+    ## Gráfico de la función de correlación para ambos deltas:
+    plt.figure(5)
+    plt.plot(k, C, label=r'$\delta=%g$'%delta)
+
+plt.xlabel(r'Pasos', fontsize=AxisLabelSize)
+plt.ylabel(r'Correlaci\'on', fontsize=AxisLabelSize)
+plt.title(r'$\delta = %g$'%delta, fontsize=TitleSize)
+plt.legend(loc='best', fontsize=LegendSize)
+plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
+plt.show()
+
+plt.savefig('Correlacion_ambosdelta.png')
