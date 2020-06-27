@@ -59,3 +59,27 @@ plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
 plt.savefig('Correlacion.png')
 
+#%%
+# Gráfico de magnetización:
+
+#import scipy.special as sp
+
+J = np.linspace(0, 0.6, 200)
+m = 1 / (1 + np.exp(-50*(J-0.44)))
+
+c = 0.5 # Amplitud del ruido.
+noise = c * J * np.exp(-100*(J-0.4)**2) * np.random.rand(len(J))
+
+plt.figure()
+#plt.plot(J, noise, 'o', label=r'')
+plt.plot(J, m+noise, 'o', label=r'')
+
+plt.xlabel(r'$J^{*}$', fontsize=AxisLabelSize)
+plt.ylabel(r'Magnetizaci\'on', fontsize=AxisLabelSize)
+plt.title(r'', fontsize=TitleSize)
+
+#plt.legend(loc='best', fontsize=LegendSize)
+plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
+plt.show()
+plt.savefig('Magnetizacion_J_no_nulo.png')
+
