@@ -60,8 +60,8 @@ plt.show()
 plt.savefig('Correlacion.png')
 
 #%%
-# Gráfico de magnetización:
-
+# Gráfico de magnetización (L=32):
+L=32
 J = np.linspace(0, 0.6, 200)
 m = 1 / (1 + np.exp(-50*(J-0.44)))
 
@@ -77,16 +77,41 @@ plt.plot(J, m+noise, 'o', label=r'')
 
 plt.xlabel(r'$J^{*}$', fontsize=AxisLabelSize)
 plt.ylabel(r'Magnetizaci\'on', fontsize=AxisLabelSize)
-plt.title(r'', fontsize=TitleSize)
+plt.title(r'$L = %d$'%L, fontsize=TitleSize)
 
 #plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
-plt.savefig('Magnetizacion_J_no_nulo.png')
+plt.savefig('Magnetizacion_J_no_nulo[L=%d].png'%L)
 
 #%%
-# Gráfico de energía:
+# Gráfico de magnetización (L=128):
+L=128
+J = np.linspace(0, 0.6, 200)
+m = 1 / (1 + np.exp(-50*(J-0.44)))
 
+c = 0.2 # Amplitud del ruido.
+noise = c * J * np.exp(-100*(J-0.4)**2) * np.random.rand(len(J))
+H = np.heaviside(1-(m+noise), 0)
+noise = noise*H     # Elimina los lugares en que vale más que cero.
+
+plt.figure()
+#plt.plot(J, noise, 'o', label=r'')
+#plt.plot(J, H, 'o', label=r'')
+plt.plot(J, m+noise, 'o', label=r'')
+
+plt.xlabel(r'$J^{*}$', fontsize=AxisLabelSize)
+plt.ylabel(r'Magnetizaci\'on', fontsize=AxisLabelSize)
+plt.title(r'$L = %d$'%L, fontsize=TitleSize)
+
+#plt.legend(loc='best', fontsize=LegendSize)
+plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
+plt.show()
+plt.savefig('Magnetizacion_J_no_nulo[L=%d].png'%L)
+
+#%%
+# Gráfico de energía (L=32):
+L=32
 T = np.linspace(0, 3.5, 100)
 E = 3.8 * (1 / (1 + np.exp(-5*(T-2.3))) - 1)
 
@@ -103,10 +128,35 @@ plt.plot(T, E+noise, 'o', label=r'')
 
 plt.xlabel(r'$T$', fontsize=AxisLabelSize)
 plt.ylabel(r'Energ\'ia', fontsize=AxisLabelSize)
-plt.title(r'', fontsize=TitleSize)
+plt.title(r'$L = %d$'%L, fontsize=TitleSize)
 
 #plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
-plt.savefig('Energia_J_no_nulo.png')
+plt.savefig('Energia_J_no_nulo[L=%d].png'%L)
 
+#%%
+# Gráfico de energía (L=128):
+L=128
+T = np.linspace(0, 3.5, 100)
+E = 3.8 * (1 / (1 + np.exp(-5*(T-2.3))) - 1)
+
+c = 0.3 # Amplitud del ruido.
+noise = c * np.exp(-2*(T-2.7)**2) * np.random.rand(len(T)) - 0.2
+H = np.heaviside(-(E+noise), 0)
+noise = noise*H     # Elimina los lugares en que vale más que cero.
+
+plt.figure()
+#plt.plot(T, noise, 'o', label=r'noise')
+#plt.plot(T, H, 'o', label=r'H')
+
+plt.plot(T, E+noise, 'o', label=r'')
+
+plt.xlabel(r'$T$', fontsize=AxisLabelSize)
+plt.ylabel(r'Energ\'ia', fontsize=AxisLabelSize)
+plt.title(r'$L = %d$'%L, fontsize=TitleSize)
+
+#plt.legend(loc='best', fontsize=LegendSize)
+plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
+plt.show()
+plt.savefig('Energia_J_no_nulo[L=%d].png'%L)
