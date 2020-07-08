@@ -26,141 +26,87 @@ plt.rc('text', usetex=Linux)
 plt.rc('font', family='serif')
 
 # Para una transición suave de colores entre las curvas:
-N=4    # cantidad de curvas
-cmap = plt.cm.viridis #coolwarm, viridis, plasma, inferno, magma, cividis
-rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N)))
+N_curvas = 5    # cantidad de curvas
+cmap = plt.cm.plasma #coolwarm, viridis, plasma, inferno, magma, cividis
+rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N_curvas)))
 
-#%%
+
 # Lectura de los datos:
 
-N = [512] #[32, 512]    # Cantidad de partículas.
-Temperaturas = np.linspace(0.4,2.9,6) # Para hacer TODOS los gráficos: np.linspace(0.4, 49.9, 100)
+N = [512] # [125, 512]    # Cantidad de partículas.
+L = 5
 
-for T in Temperaturas:
-    data = pd.read_csv('Energias/energias(N=%d,T=%g)'%(N[0],T), delimiter=' ', skiprows=None)
-    #data = np.loadtxt('energias(N=%d)'%(N), skiprows=1, delimiter=' ', unpack=True)
-    #data = data.dropna()
-
-    H = data.columns.values.tolist()
-
-
-    plt.figure()
-    for e in H[1:-1]:#['E_c', 'Vs','']:
-        #print('N = ',n)
-        x = data['paso']
-        y = data[e]
-        plt.plot(x, y, '.', label=r'$%s$'%e)
-    
-    plt.xlabel(r'Tiempo', fontsize=AxisLabelSize)
-    plt.ylabel(r'Energ\'ia', fontsize=AxisLabelSize)
-    plt.title(r'', fontsize=TitleSize)
-    
-    plt.legend(loc='best', fontsize=LegendSize)
-    plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
-    plt.show()
-    plt.savefig('Gráficos/Energia[N=%d,T=%g].png'%(N[0],T))
+Lados = [5.4, 6.1, 6.3]#, 7.0]
+# Para ver todos:
+#Lados = np.linspace(5,7,21)
+Temperaturas = np.linspace(0.4,1.9,16)
 
 #%%
-# Gráfico de lambda:
 
-N=9    # cantidad de curvas
-cmap = plt.cm.hot #vidis #coolwarm, viridis, plasma, inferno, magma, cividis
-rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N)))
-
-
-N = [512] #[32, 512]    # Cantidad de partículas.
-Temperaturas = np.linspace(0.4,2.9,6) # Para hacer TODOS los gráficos: np.linspace(0.4, 49.9, 100)
+# Gráfico de energía media:
 
 plt.figure()
 
-for T in Temperaturas:
-    data = pd.read_csv('Energias/energias(N=%d,T=%g)'%(N[0],T), delimiter=' ', skiprows=None)
+for L in Lados:
+    rho = N[0]/L**3
     
-    x = data['paso']
-    y = data['lambda_t']
-    plt.plot(x, y, '.', label=r'$T = %g$'%T)
-    
-plt.xlabel(r'Tiempo', fontsize=AxisLabelSize)
-plt.ylabel(r'Energ\'ia', fontsize=AxisLabelSize)
-plt.title(r'', fontsize=TitleSize)
+    E_tot_mean = np.zeros(len(Temperaturas))
+    for i in range(len(Temperaturas)):
+        T = float(Temperaturas[i])
+        data = pd.read_csv('Presion/presiones(N=%d,L=%g,T=%g)'%(N[0],L,T), delimiter=' ', skiprows=None)
+        
+        E_tot_mean[i] = np.mean(data['Vs+E_c'])
 
-plt.legend(loc='best', fontsize=LegendSize)
-plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
-plt.show()
-plt.savefig('Gráficos/Lambda[N=%d].png'%(N[0]))
-
-#%%
-# Gráfico de valores medios y fluctuaciones de la energía:
-
-N=3    # cantidad de curvas
-cmap = plt.cm.winter_r #vidis #coolwarm, viridis, plasma, inferno, magma, cividis
-rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N)))
-
-N = [512] #[32, 512]    # Cantidad de partículas.
-
-#Temperaturas = np.linspace(0.4,2.9,6)
-# Para hacer TODOS los gráficos:
-Temperaturas = np.linspace(0.4, 49.9, 100)
-
-Vs_std = np.zeros(len(Temperaturas))
-E_c_std = np.zeros(len(Temperaturas))
-E_tot_std = np.zeros(len(Temperaturas))
-
-Vs_mean = np.zeros(len(Temperaturas))
-E_c_mean = np.zeros(len(Temperaturas))
-E_tot_mean = np.zeros(len(Temperaturas))
-
-for i in range(len(Temperaturas)):
-    T = float(Temperaturas[i])
-    data = pd.read_csv('Energias/energias(N=%d,T=%g)'%(N[0],T), delimiter=' ', skiprows=None)
-    
-    # Fluctuaciones:
-    Vs_std[i] = np.std(data['Vs'])
-    E_c_std[i] = np.std(data['E_c'])
-    E_tot_std[i] = np.std(data['Vs+E_c'])
-    
-    # Valores medios:
-    Vs_mean[i] = np.mean(data['Vs'])
-    E_c_mean[i] = np.mean(data['E_c'])
-    E_tot_mean[i] = np.mean(data['Vs+E_c'])
+        
+        #data.columns = ['a', 'b']
+        #data = data.reset_index()
+        #data = data.drop('index', 1)
+        
+        #H = data.columns.values.tolist()
+        
+    plt.plot(Temperaturas, E_tot_mean, 'o', label=r'$L=%g, \rho = %.2f$'%(L,rho))
 
 
-# Gráfico de fluctuaciones:
-
-plt.figure()
-
-plt.plot(Temperaturas, Vs_std, 'o', label=r'$Vs$')
-plt.plot(Temperaturas, E_c_std, '.', label=r'$E_c$')
-plt.plot(Temperaturas, E_tot_std, 'o', label=r'$Vs+E_c$')
-
-plt.xlabel(r'Temperatura de equilibrio', fontsize=AxisLabelSize)
-plt.ylabel(r'Fluctuacion en la energ\'ia', fontsize=AxisLabelSize)
-plt.title(r'', fontsize=TitleSize)
-
-plt.legend(loc='best', fontsize=LegendSize)
-plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
-plt.show()
-plt.savefig('Gráficos/Fluctuaciones[N=%d].png'%(N[0]))
-
-
-# Gráfico de los valores medios:
-
-N=3    # cantidad de curvas
-cmap = plt.cm.winter #vidis #coolwarm, viridis, plasma, inferno, magma, cividis
-rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N)))
-
-
-plt.figure()
-
-plt.plot(Temperaturas, Vs_mean, 'o', label=r'$Vs$')
-plt.plot(Temperaturas, E_c_mean, 'o', label=r'$E_c$')
-plt.plot(Temperaturas, E_tot_mean, 'o', label=r'$Vs+E_c$')
-
-plt.xlabel(r'Temperatura de equilibrio', fontsize=AxisLabelSize)
+plt.xlabel(r'Temperatura', fontsize=AxisLabelSize)
 plt.ylabel(r'Energ\'ia media', fontsize=AxisLabelSize)
 plt.title(r'', fontsize=TitleSize)
 
 plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
-plt.savefig('Gráficos/Valores_medios[N=%d].png'%(N[0]))
+plt.savefig('Gráficos/Energia_media[N=%d,T=%g,rho=%g].png'%(N[0],T,rho))
+
+#%%
+
+# Gráfico de presión:
+
+plt.figure()
+
+for L in Lados:
+    rho = N[0]/L**3
+    
+    p = np.zeros(len(Temperaturas))
+    for i in range(len(Temperaturas)):
+        T = float(Temperaturas[i])
+        data = pd.read_csv('Presion/presiones(N=%d,L=%g,T=%g)'%(N[0],L,T), delimiter=' ', skiprows=None)
+        
+        p[i] = np.mean(data['p'])
+
+        
+        #data.columns = ['a', 'b']
+        #data = data.reset_index()
+        #data = data.drop('index', 1)
+        
+        #H = data.columns.values.tolist()
+        
+    plt.plot(Temperaturas, p, 'o', label=r'$L=%g, \rho = %.2f$'%(L,rho))
+
+
+plt.xlabel(r'Temperatura', fontsize=AxisLabelSize)
+plt.ylabel(r'Presi\'on', fontsize=AxisLabelSize)
+plt.title(r'', fontsize=TitleSize)
+
+plt.legend(loc='best', fontsize=LegendSize)
+plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
+plt.show()
+plt.savefig('Gráficos/Presion[N=%d,T=%g,rho=%g].png'%(N[0],T,rho))
