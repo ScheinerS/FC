@@ -93,7 +93,7 @@ plt.savefig('Gráficos/Lambda[N=%d].png'%(N[0]))
 # Gráfico de valores medios y fluctuaciones de la energía:
 
 N=3    # cantidad de curvas
-cmap = plt.cm.winter_r #vidis #coolwarm, viridis, plasma, inferno, magma, cividis
+cmap = plt.cm.winter #vidis #coolwarm, viridis, plasma, inferno, magma, cividis
 rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N)))
 
 N = [512] #[32, 512]    # Cantidad de partículas.
@@ -146,10 +146,10 @@ plt.savefig('Gráficos/Fluctuaciones[N=%d].png'%(N[0]))
 # Gráfico de los valores medios:
 
 N=3    # cantidad de curvas
-cmap = plt.cm.winter #vidis #coolwarm, viridis, plasma, inferno, magma, cividis
+cmap = plt.cm.winter #coolwarm, viridis, plasma, inferno, magma, cividis
 rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N)))
 
-
+N = [512]
 plt.figure()
 
 plt.plot(Temperaturas, Vs_mean, 'o', label=r'$Vs$')
@@ -164,3 +164,40 @@ plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
 plt.savefig('Gráficos/Valores_medios[N=%d].png'%(N[0]))
+
+#%%
+# Ajuste de la energía mecánica:
+
+from scipy.optimize import curve_fit
+
+def lineal(x, a, b):
+    return a*x+ b
+
+#parametros_iniciales = [0.5,0]
+
+popt, pcov = curve_fit(lineal, Temperaturas, E_tot_mean, p0=None)    
+
+pstd = np.sqrt(np.diag(pcov))
+nombres_de_param = ['a', 'b']
+
+print('Resultado del ajuste:\n')
+for c, v in enumerate(popt):
+    print('%s = %5.4f ± %5.4f' % (nombres_de_param[c], v, pstd[c]/2))
+
+# Gráfico del ajuste:
+N_curvas=3    # cantidad de curvas
+cmap = plt.cm.winter_r #coolwarm, viridis, plasma, inferno, magma, cividis
+rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N_curvas)))
+
+plt.figure()
+plt.plot(Temperaturas, E_tot_mean, 'o', label=r'$Vs+E_c$')
+plt.plot(Temperaturas, lineal(Temperaturas, *popt), 'b', label=r'Ajuste')
+
+plt.xlabel(r'Temperatura de equilibrio', fontsize=AxisLabelSize)
+plt.ylabel(r'Energ\'ia mec\'anica media', fontsize=AxisLabelSize)
+plt.title(r'', fontsize=TitleSize)
+
+plt.legend(loc='best', fontsize=LegendSize)
+plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
+plt.show()
+plt.savefig('Gráficos/Ajuste_Energia[N=%d].png'%(N[0]))

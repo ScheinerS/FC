@@ -13,7 +13,8 @@ double Coef_V(int N, int L,double *r);
 double presion(int N, double L, double T, double *r, double *Fr);
 
 int main(int argc, char const *argv[]) {
-  int N=125, i, it=4000;
+  int N=128, i, it=4000;
+  printf("N = %d\n", N)
   double L, T, Vs=0.0, E_c=0.0, p=0.0;
   double *r, *v, *Fr, *Frv;
   FILE *presiones;
@@ -25,25 +26,36 @@ int main(int argc, char const *argv[]) {
   Fr = malloc(3*N*sizeof(double));
   Frv = malloc(3*N*sizeof(double));
 
-  presiones = fopen("./Datos/Presion/presion", "a");
+  //presiones = fopen("./Datos/Presion/presion", "a");
 
   for(i=0; i<3*N; i++) {
     *(Fr + i) = 0.0;
   }
 
 for(L=5; L<7; L+=0.1) {
-    fprintf(presiones, "%f\n", (double)N/(L*L*L));
+	
+	printf("L = %.2f\r",L);
+	fflush(stdout);
+	
+    //fprintf(presiones, "%f\n", (double)N/(L*L*L));
     for(T=0.4; T<2; T+=0.1) {
       Vs = 0.0;
       E_c = 0.0;
+      
+    	char filename[255];
+		sprintf(filename,"./Datos/Presion/presiones(N=%d,L=%g,T=%g)",N,L,T);
+		presiones = fopen(filename, "w");
 
-      fprintf(presiones, "Temperatura %f\n", T);
+		// Encabezados de las columnas:
+		fprintf(presiones, "Vs+E_c p\n");
+	
+      //fprintf(presiones, "Temperatura %f\n", T);
       set_box(r,N,L);   //Coloca las particulas en su posición inicial.
       Vs = fuerza(N, L, r, Fr, Frv);  //Calculo de Vs.
       p = presion(N, L, T, r, Fr);
       E_c = set_v(v,N,T);     //Crea las velocidades iniciales.
 
-      fprintf(presiones, "Datos %f %f\n", Vs+E_c, p);
+      fprintf(presiones, "%f %f\n", Vs+E_c, p);
 
       for(i=0; i<it; i++) {
         posiciones(N, L, r, v, Fr);            //Calcula las nuevas posiciones  <----
@@ -52,7 +64,7 @@ for(L=5; L<7; L+=0.1) {
         p = presion(N, L, T, r, Fr);
         E_c = velocity_verlet(N, T, v, Fr, Frv);  //Calcula las nuevas velocidades   ---
 
-        fprintf(presiones, "Datos %f %f\n", Vs+E_c, p);
+        fprintf(presiones, "%f %f\n", Vs+E_c, p);
 
       }
     }
