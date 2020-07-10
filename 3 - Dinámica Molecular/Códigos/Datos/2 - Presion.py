@@ -26,19 +26,20 @@ plt.rc('text', usetex=Linux)
 plt.rc('font', family='serif')
 
 # Para una transición suave de colores entre las curvas:
-N_curvas = 5    # cantidad de curvas
-cmap = plt.cm.plasma #coolwarm, viridis, plasma, inferno, magma, cividis
+N_curvas = 16    # cantidad de curvas
+cmap = plt.cm.summer #coolwarm, viridis, plasma, inferno, magma, cividis
 rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N_curvas)))
 
 
 # Lectura de los datos:
 
-N = [512] # [125, 512]    # Cantidad de partículas.
+N = [125] #[32, 64, 125, 128, 512]    # Cantidad de partículas.
 L = 5
 
-Lados = [5.4, 6.1, 6.3]#, 7.0]
+#Lados = [5.4, 6.1, 6.3]#, 7.0]
+
 # Para ver todos:
-#Lados = np.linspace(5,7,21)
+Lados = np.linspace(5,7,21)
 Temperaturas = np.linspace(0.4,1.9,16)
 
 #%%
@@ -71,10 +72,10 @@ plt.xlabel(r'Temperatura', fontsize=AxisLabelSize)
 plt.ylabel(r'Energ\'ia media', fontsize=AxisLabelSize)
 plt.title(r'', fontsize=TitleSize)
 
-plt.legend(loc='best', fontsize=LegendSize)
+#plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
-plt.savefig('Gráficos/Energia_media[N=%d,T=%g,rho=%g].png'%(N[0],T,rho))
+plt.savefig('Gráficos/Energia_media[N=%d].png'%(N[0]))
 
 #%%
 
@@ -106,7 +107,7 @@ plt.xlabel(r'Temperatura', fontsize=AxisLabelSize)
 plt.ylabel(r'Presi\'on', fontsize=AxisLabelSize)
 plt.title(r'', fontsize=TitleSize)
 
-plt.legend(loc='best', fontsize=LegendSize)
+#plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
-plt.savefig('Gráficos/Presion[N=%d,T=%g,rho=%g].png'%(N[0],T,rho))
+plt.savefig('Gráficos/Presion[N=%d].png'%(N[0]))

@@ -13,7 +13,8 @@ double Coef_V(int N, int L,double *r);
 double presion(int N, double L, double T, double *r, double *Fr);
 
 int main(int argc, char const *argv[]) {
-  int N=512, i, it=4000;
+  int N=128, i, it=4000;
+  printf("N = %d\n", N)
   double L, T, Vs=0.0, E_c=0.0, p=0.0;
   double *r, *v, *Fr, *Frv;
   FILE *presiones;
