@@ -1,49 +1,78 @@
-import numpy as np
+import sys
+import os
 import matplotlib.pyplot as plt
-
-correlacion = np.loadtxt('correlacion(delta=1).csv', skiprows=1, delimiter=' ', unpack=True) 
-
-i=correlacion[0] #numero de pasos
-L=correlacion[1] #valores de x
-M=correlacion[2] #valores de w, 
-k=np.linspace(0,499,500)
-C=correlacion[3][0:len(k)] #valores de correlacion
+#import csv
+import numpy as np
 
 
-#%%
-#Histograma de la distribucion de pasos para delta=1
+path = os.path.dirname(os.path.realpath('__file__'))
+sys.path.append(path)
 
-plt.hist(L, bins=70)
+TitleSize = 15
+AxisLabelSize = 15
+LegendSize = 12
+NumberSize = 12
 
-plt.title('Delta=1.0', fontsize=16)
-plt.xlabel('x', fontsize=14)
-plt.ylabel('', fontsize=14)
+plt.close('all')
 
-plt.grid()
-plt.legend()
-plt.show()
+if os.name == 'posix':
+    Linux = True
+
+plt.rc('text', usetex=Linux)
+plt.rc('font', family='serif')
 
 #%%
-#Histograma de la distribucion de pasos para delta=0.1
 
-plt.hist(L, bins=70)
+#correlacion = np.loadtxt('correlacion(delta=1).csv', skiprows=1, delimiter=' ', unpack=True) 
+#correlacion_01 = np.loadtxt('correlacion(delta=0.1).csv', skiprows=1, delimiter=' ', unpack=True) 
 
-plt.title('Delta=0.1', fontsize=16)
-plt.xlabel('x', fontsize=14)
-plt.ylabel('', fontsize=14)
+for delta in [0.1, 1]:
+    print('%g'%delta)
+    correlacion = np.loadtxt('correlacion(delta=%g).csv'%delta, skiprows=1, delimiter=' ', unpack=True) 
 
-plt.grid()
-plt.legend()
+    i=correlacion[0] #numero de pasos
+    L=correlacion[1] #valores de x
+    M=correlacion[2] #valores de w, 
+    k=np.linspace(0,499,500)
+    C=correlacion[3][0:len(k)] #valores de correlacion
+
+
+    #Histograma de la distribucion de pasos para delta=1
+    plt.figure()
+    
+
+    plt.hist(L, bins=70)
+    
+    plt.xlabel(r'$x$', fontsize=AxisLabelSize)
+    plt.ylabel(r'Cantidad de veces', fontsize=AxisLabelSize)
+    plt.title(r'$\delta = %g$'%delta, fontsize=TitleSize)
+    #plt.legend(loc='best', fontsize=LegendSize)
+    plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
+    plt.show()
+    plt.savefig('Histograma_delta=%g.png'%delta)
+
+
+    ## Gráfico de la función de correlación:
+    plt.figure()
+    plt.plot(k, C, '-r', label=r'delta=0.1' )
+
+    plt.xlabel(r'Pasos', fontsize=AxisLabelSize)
+    plt.ylabel(r'Correlaci\'on', fontsize=AxisLabelSize)
+    plt.title(r'$\delta = %g$'%delta, fontsize=TitleSize)
+    plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
+    plt.show()
+    plt.savefig('Correlacion_delta=%g.png'%delta)
+    
+    
+    ## Gráfico de la función de correlación para ambos deltas:
+    plt.figure(5)
+    plt.plot(k, C, label=r'$\delta=%g$'%delta)
+
+plt.xlabel(r'Pasos', fontsize=AxisLabelSize)
+plt.ylabel(r'Correlaci\'on', fontsize=AxisLabelSize)
+#plt.title(r'$\delta = %g$'%delta, fontsize=TitleSize)
+plt.legend(loc='best', fontsize=LegendSize)
+plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
 
-#%%
-##Debería ser el gráfico para la correlación, pero todavía no lo sé hacer.
-plt.plot(k, C, '-r', label='delta=0.1' )
-
-plt.title('', fontsize=16)
-plt.xlabel('pasos', fontsize=14)
-plt.ylabel('correlación', fontsize=14)
-
-plt.grid()
-plt.legend()
-plt.show()
+plt.savefig('Correlacion_ambosdelta.png')
