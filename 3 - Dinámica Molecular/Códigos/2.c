@@ -3,6 +3,24 @@
 #include <math.h>
 #include <time.h>
 
+#define PARTICULAS	64		// cantidad de partículas.
+#define ITERACIONES	4000	// iteraciones por cada temperatura.
+
+// Temperaturas:
+#define T_MAX	2
+#define T_MIN	0.4
+#define T_STEP	0.05
+
+// Dimensiones de la caja:
+#define L_MAX	7
+#define L_MIN	5
+#define L_STEP	0.1
+
+
+
+
+
+
 double set_box(double *r, int N, double L);
 double set_v(double *v, int N, double T);
 double Gaussiana(double nu, double sigma);
@@ -13,8 +31,8 @@ double Coef_V(int N, int L,double *r);
 double presion(int N, double L, double T, double *r, double *Fr);
 
 int main(int argc, char const *argv[]) {
-  int N=128, i, it=4000;
-  printf("N = %d\n", N)
+  int N=PARTICULAS, i, it=ITERACIONES;
+  printf("N = %d\n", N);
   double L, T, Vs=0.0, E_c=0.0, p=0.0;
   double *r, *v, *Fr, *Frv;
   FILE *presiones;
@@ -32,15 +50,15 @@ int main(int argc, char const *argv[]) {
     *(Fr + i) = 0.0;
   }
 
-for(L=5; L<7; L+=0.1) {
+for(L=L_MIN; L<=L_MAX; L+=L_STEP) {
 	
 	printf("L = %.2f\r",L);
 	fflush(stdout);
 	
     //fprintf(presiones, "%f\n", (double)N/(L*L*L));
-    for(T=0.4; T<2; T+=0.1) {
-      Vs = 0.0;
-      E_c = 0.0;
+    for(T=T_MAX; T>=T_MIN; T-=T_STEP) {
+		Vs = 0.0;
+		E_c = 0.0;
       
     	char filename[255];
 		sprintf(filename,"./Datos/Presion/presiones(N=%d,L=%g,T=%g)",N,L,T);
@@ -58,14 +76,14 @@ for(L=5; L<7; L+=0.1) {
       fprintf(presiones, "%f %f\n", Vs+E_c, p);
 
       for(i=0; i<it; i++) {
-        posiciones(N, L, r, v, Fr);            //Calcula las nuevas posiciones  <----
-        E_c = 0.0;                                                                //|
-        Vs = fuerza(N, L, r, Fr, Frv) ;         //Calculo de fuerzas.                |
+        posiciones(N, L, r, v, Fr);            //Calculamos las nuevas posiciones.
+        E_c = 0.0;
+        Vs = fuerza(N, L, r, Fr, Frv) ;         //Cálculo de fuerzas.
         p = presion(N, L, T, r, Fr);
-        E_c = velocity_verlet(N, T, v, Fr, Frv);  //Calcula las nuevas velocidades   ---
-
-        fprintf(presiones, "%f %f\n", Vs+E_c, p);
-
+        E_c = velocity_verlet(N, T, v, Fr, Frv);  //Calculamos las nuevas velocidades.
+        if(it%100==0){
+        	fprintf(presiones, "%f %f\n", Vs+E_c, p);
+			}
       }
     }
   }
@@ -163,8 +181,8 @@ double fuerza(int N, int L, double *r, double *Fr, double *Frv) {
   int i, j;
   double rp, rp3, rp6, rpx, rpy, rpz, Fs=0.0, Vs=0.0, corr_V=4.0 * (1.0/59605.0 - 1.0/244.0);
 
-  for(j=0; j<3*N; j++) {                                                        //|
-    *(Frv + j) = *(Fr + j);                  //Fuerza anterior.                   |
+  for(j=0; j<3*N; j++) {
+    *(Frv + j) = *(Fr + j);                  //Fuerza anterior.
   }
 
   for(j=0; j<3*N; j++) {

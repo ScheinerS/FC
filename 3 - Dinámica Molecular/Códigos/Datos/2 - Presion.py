@@ -33,14 +33,16 @@ rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N_curvas)))
 
 # Lectura de los datos:
 
-N = [125] #[32, 64, 125, 128, 512]    # Cantidad de partículas.
+N = [32] #[32, 64, 125, 128, 512]    # Cantidad de partículas.
 L = 5
 
-#Lados = [5.4, 6.1, 6.3]#, 7.0]
-
+L_step = 0.1
+T_step = 0.001
 # Para ver todos:
-Lados = np.linspace(5,7,21)
-Temperaturas = np.linspace(0.4,1.9,16)
+
+Lados = np.arange(5,7+L_step,L_step)
+
+Temperaturas = np.arange(0.4,1.9,T_step)
 
 #%%
 
@@ -65,7 +67,7 @@ for L in Lados:
         
         #H = data.columns.values.tolist()
         
-    plt.plot(Temperaturas, E_tot_mean, 'o', label=r'$L=%g, \rho = %.2f$'%(L,rho))
+    plt.plot(Temperaturas, E_tot_mean, '-', label=r'$L=%g, \rho = %.2f$'%(L,rho))
 
 
 plt.xlabel(r'Temperatura', fontsize=AxisLabelSize)
