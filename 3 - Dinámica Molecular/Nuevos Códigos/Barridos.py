@@ -5,12 +5,16 @@ Created on Sat Jul 25 17:23:26 2020
 
 @author: ramiro
 """
-
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rcParams, cycler
 
+if os.name == 'posix':
+    Linux = True
 
+plt.rc('text', usetex=Linux)
+plt.rc('font', family='serif')
 
 TitleSize = 15
 AxisLabelSize = 15
