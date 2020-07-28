@@ -10,17 +10,18 @@
 #include "avanzar.h"
 
 #define NPART      10*10*10
-#define LADO       10.3574
-#define PASOS      5000
+#define LADO       8.9390
+#define PASOS      3000
 #define SKIP       10
-#define TEMP       0.8
+#define TEMP       0.4
 #define TEMPMIN    0.1
-#define H          0.0001
-#define EQUILIBRIO 5000
+#define H          0.001
+#define EQUILIBRIO 10000
+#define PROMEDIO   40
 
 int main()
 {
-  int    i,m,j,npart,pasos,equilibrio;
+  int    i,m,j,npart,pasos,equilibrio,promedio;
   char   filename[255];
   double *minmax,r2min,r2max,lado,temp,lambda;
   double *tabla,*r,*r0,*v,*f0,*f,ecin,epot,*rcm;
@@ -31,8 +32,9 @@ int main()
   pasos=  PASOS;
   temp=   TEMP;
   equilibrio= EQUILIBRIO;
+  promedio=PROMEDIO;
 
-  fp = fopen("DCM(T=0.8,rho=0.9).dat","w");
+  fp = fopen("DCM(T=0.4,rho=1.4).dat","w");
   fprintf(fp,"Dcm\n");
 
   strcpy(filename,"tabla.dat");
@@ -79,7 +81,7 @@ int main()
     }
 
 
-    for(j=0;j<20*pasos;j++)
+    for(j=0;j<promedio;j++)
     {
 
 
@@ -100,7 +102,7 @@ int main()
 
               ecin      += velocity_verlet(npart,v,f,f0,H);
 
-            *(rcm+i)    +=desp_cuadra_medio(npart,r,r0);
+            *(rcm+i)    += desp_cuadra_medio(npart,r,r0);
           
 
           //if(i % SKIP == 0) save_lammpstrj(filename,r,v,npart,lado,i);
@@ -113,7 +115,7 @@ int main()
         
         //fprintf(fp,"%lf %lf %lf\n",ecin,epot,ecin+epot);
 
-      printf("Porcentaje:\t%d/%d\r",j,20*pasos);
+      printf("Porcentaje:\t%d/%d\r",j,promedio);
       fflush(stdout);   
 
     }
@@ -122,7 +124,7 @@ int main()
     for(i=0;i<pasos;i++)
     {
       
-      *(rcm+i) = *(rcm+i)/20;
+      *(rcm+i) = *(rcm+i)/promedio;
 
       fprintf(fp,"%d %lf\n",i,*(rcm+i));
     }
