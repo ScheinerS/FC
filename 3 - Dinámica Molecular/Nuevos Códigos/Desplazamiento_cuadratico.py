@@ -16,8 +16,8 @@ TitleSize = 15
 AxisLabelSize = 15
 LegendSize = 12
 
-rho = [0.9, 0.46, 0.58, 0.75, 1]
-
+rho = [1.4, 0.9, 1.4, 0.9, 0.1]
+T   = [0.4, 0.8, 0.8, 1, 1.5]
 # Para una transición suave de colores entre las curvas:
 N_curvas = 6    # cantidad de curvas
 cmap = plt.cm.plasma #coolwarm, viridis, plasma, inferno, magma, cividis
