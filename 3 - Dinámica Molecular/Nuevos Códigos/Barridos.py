@@ -28,6 +28,8 @@ rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N_curvas)))
 
 rho = [0.36, 0.46, 0.58, 0.75, 1]
 
+# Gráfico de E_tot:
+
 plt.figure()
 
 for r in rho:
@@ -45,11 +47,39 @@ for r in rho:
     plt.plot(Temp,Etot, label=r'$\rho = %g$'%r)
 
 plt.xlabel(r'Temperatura', fontsize=AxisLabelSize)
-#plt.ylabel(r'Presión', fontsize=AxisLabelSize)
+plt.ylabel(r'$E_{tot}$', fontsize=AxisLabelSize)
 plt.title(r'', fontsize=TitleSize)
 
 plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
 
-#plt.savefig('Gráficos/Presion.png')
+plt.savefig('Gráficos/E_tot.png')
+
+# Gráfico de Presión:
+
+plt.figure()
+
+for r in rho:
+    data = np.loadtxt('Barrido(T=0.1-2.5,rho=%g).dat'%r, skiprows=1, delimiter=' ', unpack=False)
+
+    Ekin = data[:,0]
+    Epot = data[:,1]
+    Etot = data[:,2]
+    Temp = data[:,3]
+    Pres = data[:,4]
+    a=len(Ekin)
+    iteracion=np.linspace(1,a,a)
+    
+
+    plt.plot(Temp, Pres, label=r'$\rho = %g$'%r)
+
+plt.xlabel(r'Temperatura', fontsize=AxisLabelSize)
+plt.ylabel(r'Presión', fontsize=AxisLabelSize)
+plt.title(r'', fontsize=TitleSize)
+
+plt.legend(loc='best', fontsize=LegendSize)
+plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
+plt.show()
+
+plt.savefig('Gráficos/Presion.png')
