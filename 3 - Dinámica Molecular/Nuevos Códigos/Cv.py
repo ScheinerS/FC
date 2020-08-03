@@ -40,11 +40,11 @@ for r in rho:
     plt.plot(Temp,Cv, label=r'$\rho = %g$'%r)
 
 plt.xlabel(r'Temperatura', fontsize=AxisLabelSize)
-#plt.ylabel(r'Presión', fontsize=AxisLabelSize)
+plt.ylabel(r'Presión', fontsize=AxisLabelSize)
 plt.title(r'', fontsize=TitleSize)
 
 plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
 
-#plt.savefig('Gráficos/Cv.png')
+plt.savefig('Gráficos/Cv.png')
