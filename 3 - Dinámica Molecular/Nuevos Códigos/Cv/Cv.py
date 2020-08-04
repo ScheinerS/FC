@@ -47,4 +47,4 @@ plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
 
-plt.savefig('Gráficos/Cv.png')
+#plt.savefig('Gráficos/Cv.png')

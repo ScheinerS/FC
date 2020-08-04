@@ -23,7 +23,7 @@ TitleSize = 15
 AxisLabelSize = 15
 LegendSize = 12
 
-T_y_rho = [[0.3, 0.36], [0.3, 0.46], [0.3, 0.58], [0.3, 0.75], [0.3, 0.90], [0.3, 1],[1.5, 0.36], [1.5, 0.46], [1.5, 0.58], [1.5, 0.75], [1.5, 0.90], [1.5, 1]]
+T_y_rho = [[0.3, 0.36], [0.3, 0.46], [0.3, 0.58], [0.3, 0.75], [0.3, 0.9], [0.3, 1], [1.5, 0.36], [1.5, 0.46], [1.5, 0.58], [1.5, 0.75], [1.5, 0.9], [1.5, 1]]
 
 
 # Para una transición suave de colores entre las curvas:
@@ -54,4 +54,4 @@ plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
 
-plt.savefig('Gráficos/DCM.png')
+#plt.savefig('Gráficos/DCM.png')
