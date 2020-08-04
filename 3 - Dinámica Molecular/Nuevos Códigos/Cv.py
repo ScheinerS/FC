@@ -40,7 +40,7 @@ for r in rho:
     plt.plot(Temp,Cv, label=r'$\rho = %g$'%r)
 
 plt.xlabel(r'Temperatura', fontsize=AxisLabelSize)
-plt.ylabel(r'Cv', fontsize=AxisLabelSize)
+plt.ylabel(r'$C_{v}$', fontsize=AxisLabelSize)
 plt.title(r'', fontsize=TitleSize)
 
 plt.legend(loc='best', fontsize=LegendSize)

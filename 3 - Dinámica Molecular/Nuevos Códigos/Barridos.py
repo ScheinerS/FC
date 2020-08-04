@@ -44,7 +44,7 @@ for r in rho:
     iteracion=np.linspace(1,a,a)
     
 
-    plt.plot(Temp,Pres, label=r'$\rho = %g$'%r)
+    plt.plot(Temp,Etot, label=r'$\rho = %g$'%r)
 
 plt.xlabel(r'Temperatura', fontsize=AxisLabelSize)
 plt.ylabel(r'$E_{tot}$', fontsize=AxisLabelSize)

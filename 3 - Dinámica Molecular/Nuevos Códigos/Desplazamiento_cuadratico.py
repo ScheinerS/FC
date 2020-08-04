@@ -27,8 +27,8 @@ T_y_rho = [[0.4, 1.4], [0.8, 0.9], [0.8, 1.4], [1, 0.9], [1.5, 0.1]]
 
 
 # Para una transición suave de colores entre las curvas:
-N_curvas = len(T_y_rho)    # cantidad de curvas
-cmap = plt.cm.Accent #coolwarm, viridis, plasma, inferno, magma, cividis
+N_curvas = len(T_y_rho)+1    # cantidad de curvas
+cmap = plt.cm.plasma #coolwarm, viridis, plasma, inferno, magma, cividis
 rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N_curvas)))
 # help(plt.cm)
 
@@ -54,4 +54,4 @@ plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
 
-#plt.savefig('Gráficos/DCM.png')
+plt.savefig('Gráficos/DCM.png')
