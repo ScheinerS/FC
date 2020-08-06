@@ -54,7 +54,7 @@ plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
 
-plt.savefig('Gráficos/E_tot.png')
+plt.savefig('E_tot.png')
 
 # Gráfico de Presión:
 
@@ -82,4 +82,4 @@ plt.legend(loc='best', fontsize=LegendSize)
 plt.grid(axis='both', color='k', linestyle='dashed', linewidth=2, alpha=0.2)
 plt.show()
 
-plt.savefig('Gráficos/Presion.png')
+plt.savefig('Presion.png')

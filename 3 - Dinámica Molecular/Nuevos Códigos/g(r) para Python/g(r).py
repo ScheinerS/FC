@@ -23,13 +23,16 @@ TitleSize = 15
 AxisLabelSize = 15
 LegendSize = 10
 
-T_y_rho = [[0.3, 0.36], [0.3, 0.46], [0.3, 0.58], [0.3, 0.75], [0.3, 0.9], [0.3, 1],[1.5, 0.36], [1.5, 0.46], [1.5, 0.58], [1.5, 0.75], [1.5, 0.9], [1.5, 1]]
+T_y_rho_Viejos = [[0.3, 0.36], [0.3, 0.46], [0.3, 0.58], [0.3, 0.75], [0.3, 0.9], [0.3, 1],[1.5, 0.36], [1.5, 0.46], [1.5, 0.58], [1.5, 0.75], [1.5, 0.9], [1.5, 1]]
+T_y_rho = []
 
+for i in [0, 5, 6, 11]:
+    T_y_rho.append(T_y_rho_Viejos[i])
 
 # Para una transición suave de colores entre las curvas:
-N_curvas = len(T_y_rho)+1    # cantidad de curvas
-cmap = plt.cm.viridis_r #coolwarm, viridis, plasma, inferno, magma, cividis
-rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N_curvas)))
+#N_curvas = len(T_y_rho)    # cantidad de curvas
+#cmap = plt.cm.nipy_spectral #coolwarm, viridis, plasma, inferno, magma, cividis
+#rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(0, 1, N_curvas)))
 # help(plt.cm)
 
 plt.figure()
